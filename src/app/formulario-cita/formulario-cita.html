@@ -1,0 +1,615 @@
+<section
+  class="relative min-h-screen overflow-hidden bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 px-4 py-12"
+>
+
+  <!-- Decoración -->
+  <div
+    class="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-rose-200/30 blur-3xl"
+  ></div>
+
+  <div
+    class="pointer-events-none absolute -bottom-24 -right-24 h-80 w-80 rounded-full bg-amber-200/30 blur-3xl"
+  ></div>
+
+
+  <!-- Toast -->
+  @if (toast.visible) {
+
+    <div
+      class="fixed right-4 top-4 z-50 w-[calc(100%-2rem)] max-w-sm animate-[toastIn_.35s_ease-out] rounded-2xl border bg-white p-4 shadow-2xl sm:right-6 sm:top-6"
+      [class.border-emerald-200]="toast.tipo === 'success'"
+      [class.border-red-200]="toast.tipo === 'error'"
+      [class.border-amber-200]="toast.tipo === 'warning'"
+    >
+
+      <div class="flex items-start gap-3">
+
+        <div
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xl"
+          [class.bg-emerald-100]="toast.tipo === 'success'"
+          [class.bg-red-100]="toast.tipo === 'error'"
+          [class.bg-amber-100]="toast.tipo === 'warning'"
+        >
+          @if (toast.tipo === 'success') {
+            💛
+          }
+
+          @if (toast.tipo === 'error') {
+            🥺
+          }
+
+          @if (toast.tipo === 'warning') {
+            ✨
+          }
+        </div>
+
+        <div class="min-w-0 flex-1">
+
+          <p
+            class="font-bold text-slate-800"
+          >
+            {{ toast.titulo }}
+          </p>
+
+          <p
+            class="mt-1 text-sm leading-5 text-slate-500"
+          >
+            {{ toast.mensaje }}
+          </p>
+
+        </div>
+
+        <button
+          type="button"
+          (click)="cerrarToast()"
+          class="rounded-lg px-2 py-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+        >
+          ✕
+        </button>
+
+      </div>
+
+    </div>
+
+  }
+
+
+  <div class="relative mx-auto w-full max-w-3xl">
+
+    <!-- Encabezado -->
+
+    <div class="mb-8 text-center">
+
+      <div
+        class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-rose-100 text-3xl shadow-sm transition duration-500 hover:rotate-12 hover:scale-110"
+      >
+        ♡
+      </div>
+
+      <h1
+        class="text-3xl font-bold tracking-tight text-slate-800 sm:text-4xl"
+      >
+        Nuestra próxima cita 💛
+      </h1>
+
+      <p
+        class="mx-auto mt-4 max-w-xl text-base leading-7 text-slate-500"
+      >
+        Ahora viene una parte muy importante.
+        Elige el día que mejor te funcione y cuéntame
+        algunos pequeños detalles para preparar algo
+        muy especial para nosotros.
+      </p>
+
+    </div>
+
+
+    <!-- Formulario -->
+
+    <form
+      #formCita="ngForm"
+      (ngSubmit)="guardarCita(formCita)"
+      novalidate
+      class="rounded-3xl border border-white/70 bg-white/85 p-6 shadow-2xl shadow-rose-100/70 backdrop-blur-xl transition-all duration-500 sm:p-10"
+    >
+
+
+      <!-- Nombre -->
+
+      <div class="mb-8">
+
+        <label
+          for="nombre"
+          class="mb-2 block text-sm font-semibold text-slate-700"
+        >
+          ¿Cómo quieres que te llame? 💕
+        </label>
+
+        <input
+          #nombre="ngModel"
+          id="nombre"
+          name="nombre"
+          type="text"
+          required
+          minlength="2"
+          maxlength="50"
+          [(ngModel)]="cita.name"
+          placeholder="Escribe tu nombre..."
+          class="w-full rounded-2xl border bg-white px-4 py-3.5 text-slate-800 outline-none transition-all duration-300 placeholder:text-slate-400 hover:border-rose-300 focus:-translate-y-0.5 focus:border-rose-400 focus:shadow-lg focus:shadow-rose-100 focus:ring-4 focus:ring-rose-100"
+          [class.border-red-300]="
+            nombre.invalid &&
+            (nombre.touched || intentoEnvio)
+          "
+          [class.border-slate-200]="
+            !nombre.invalid ||
+            (!nombre.touched && !intentoEnvio)
+          "
+        />
+
+        @if (
+          nombre.invalid &&
+          (nombre.touched || intentoEnvio)
+        ) {
+
+          <div
+            class="mt-2 text-sm text-red-500"
+          >
+
+            @if (nombre.errors?.['required']) {
+              <p>💕 Dime cómo quieres que te llame.</p>
+            }
+
+            @if (nombre.errors?.['minlength']) {
+              <p>
+                El nombre debe tener al menos 2 caracteres.
+              </p>
+            }
+
+          </div>
+
+        }
+
+      </div>
+
+
+      <!-- Fechas -->
+
+      <div class="mb-8">
+
+        <div class="mb-4">
+
+          <h2
+            class="text-xl font-bold text-slate-800"
+          >
+            Elige nuestra fecha ✨
+          </h2>
+
+          <p
+            class="mt-1 text-sm text-slate-500"
+          >
+            Puedes elegir una de estas fechas o escribir otra.
+            Solo puede quedar una opción seleccionada.
+          </p>
+
+        </div>
+
+
+        <div class="space-y-3">
+
+          @for (
+            fecha of fechasDisponibles;
+            track fecha.valor
+          ) {
+
+            <label
+              class="group flex cursor-pointer items-center gap-4 rounded-2xl border bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-rose-300 hover:bg-rose-50/50 hover:shadow-md"
+              [class.border-rose-400]="
+                fechaSeleccionada === fecha.valor
+              "
+              [class.bg-rose-50]="
+                fechaSeleccionada === fecha.valor
+              "
+              [class.shadow-md]="
+                fechaSeleccionada === fecha.valor
+              "
+              [class.border-slate-200]="
+                fechaSeleccionada !== fecha.valor
+              "
+            >
+
+              <input
+                type="checkbox"
+                [checked]="
+                  fechaSeleccionada === fecha.valor
+                "
+                (change)="
+                  alternarFecha(fecha.valor, $event)
+                "
+                class="h-5 w-5 cursor-pointer accent-rose-500"
+              />
+
+              <div class="flex-1">
+
+                <p
+                  class="font-semibold text-slate-800 transition group-hover:text-rose-600"
+                >
+                  {{ fecha.titulo }}
+                </p>
+
+                <p
+                  class="mt-0.5 text-sm text-slate-500"
+                >
+                  {{ fecha.hora }}
+                </p>
+
+              </div>
+
+              @if (
+                fechaSeleccionada === fecha.valor
+              ) {
+
+                <span
+                  class="text-xl"
+                >
+                  💛
+                </span>
+
+              }
+
+            </label>
+
+          }
+
+        </div>
+
+
+        @if (
+          !hayFechaSeleccionada &&
+          intentoEnvio
+        ) {
+
+          <p
+            class="mt-3 text-sm font-medium text-red-500"
+          >
+            ✨ Elige una fecha o ingresa una fecha manual.
+          </p>
+
+        }
+
+      </div>
+
+
+      <!-- Fecha manual -->
+
+      <div
+        class="mb-8 rounded-2xl border border-amber-100 bg-amber-50/70 p-5 transition-all duration-300 hover:shadow-md"
+      >
+
+        <label
+          for="otraFecha"
+          class="mb-2 block font-semibold text-amber-900"
+        >
+          ¿Ninguna fecha te funciona? 🌙
+        </label>
+
+        <p
+          class="mb-4 text-sm leading-6 text-amber-800/80"
+        >
+          No pasa nada. Elige aquí el día y la hora
+          que tú prefieras.
+        </p>
+
+        <input
+          id="otraFecha"
+          name="otraFecha"
+          type="datetime-local"
+          [min]="fechaMinima"
+          [ngModel]="otraFecha"
+          (ngModelChange)="usarFechaManual($event)"
+          class="w-full rounded-xl border border-amber-200 bg-white px-4 py-3 text-slate-700 outline-none transition-all duration-300 hover:border-rose-300 focus:-translate-y-0.5 focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+        />
+
+        @if (otraFecha) {
+
+          <p
+            class="mt-3 text-sm font-medium text-amber-700"
+          >
+            ✨ Se usará esta fecha manual y cualquier
+            fecha marcada arriba quedará desactivada.
+          </p>
+
+        }
+
+      </div>
+
+
+      <!-- Lugar -->
+
+      <div class="mb-6">
+
+        <label
+          for="lugar"
+          class="mb-2 block text-sm font-semibold text-slate-700"
+        >
+          ¿Hay algún lugar al que te gustaría ir? 📍
+        </label>
+
+        <input
+          #lugar="ngModel"
+          id="lugar"
+          name="lugar"
+          type="text"
+          required
+          minlength="2"
+          maxlength="120"
+          [(ngModel)]="cita.lugar"
+          placeholder="Un lugar o simplemente: déjalo en tus manos..."
+          class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 outline-none transition-all duration-300 placeholder:text-slate-400 hover:border-rose-300 focus:-translate-y-0.5 focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+        />
+
+        @if (
+          lugar.invalid &&
+          (lugar.touched || intentoEnvio)
+        ) {
+
+          <p
+            class="mt-2 text-sm text-red-500"
+          >
+            📍 Guanajuao, Camping, sorprendeme.
+          </p>
+
+        }
+
+      </div>
+
+
+      <!-- Comida -->
+
+      <div class="mb-6">
+
+        <label
+          for="comida"
+          class="mb-2 block text-sm font-semibold text-slate-700"
+        >
+          ¿Qué se te antojaría comer? 🍝
+        </label>
+
+        <input
+          #comida="ngModel"
+          id="comida"
+          name="comida"
+          type="text"
+          required
+          minlength="2"
+          maxlength="120"
+          [(ngModel)]="cita.comida"
+          placeholder="Italiana, Francesa, Mexicana..."
+          class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 outline-none transition-all duration-300 placeholder:text-slate-400 hover:border-rose-300 focus:-translate-y-0.5 focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+        />
+
+        @if (
+          comida.invalid &&
+          (comida.touched || intentoEnvio)
+        ) {
+
+          <p
+            class="mt-2 text-sm text-red-500"
+          >
+            🍝 Cuéntame qué se te antojaría comer.
+          </p>
+
+        }
+
+      </div>
+
+
+      <!-- Vestimenta -->
+
+      <div class="mb-6">
+
+        <label
+          for="vestimenta"
+          class="mb-2 block text-sm font-semibold text-slate-700"
+        >
+          ¿Cómo te gustaría vestirnos? 👗
+        </label>
+
+        <select
+          #vestimenta="ngModel"
+          id="vestimenta"
+          name="vestimenta"
+          required
+          [(ngModel)]="cita.tipoVestimenta"
+          class="w-full cursor-pointer rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-slate-700 outline-none transition-all duration-300 hover:border-rose-300 focus:-translate-y-0.5 focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+        >
+          <option value="">
+            Elige una opción
+          </option>
+
+          <option value="Casual">
+            Casual
+          </option>
+
+          <option value="Casual elegante">
+            Casual elegante
+          </option>
+
+          <option value="Elegante">
+            Elegante
+          </option>
+
+          <option value="Sorpréndeme 💛">
+            Sorpréndeme 💛
+          </option>
+
+        </select>
+
+        @if (
+          vestimenta.invalid &&
+          (vestimenta.touched || intentoEnvio)
+        ) {
+
+          <p
+            class="mt-2 text-sm text-red-500"
+          >
+            👗 Elige cómo te gustaría que nos vistamos.
+          </p>
+
+        }
+
+      </div>
+
+
+      <!-- Mensaje -->
+
+      <div class="mb-8">
+
+        <label
+          for="mensaje"
+          class="mb-2 block text-sm font-semibold text-slate-700"
+        >
+          ¿Quieres decirme algo? 💌
+        </label>
+
+        <textarea
+          #mensajeInput="ngModel"
+          id="mensaje"
+          name="mensaje"
+          [(ngModel)]="mensaje"
+          maxlength="500"
+          rows="6"
+          placeholder="Puedes escribirme lo que quieras aquí..."
+          class="w-full resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-slate-800 outline-none transition-all duration-300 placeholder:text-slate-400 hover:border-rose-300 focus:-translate-y-0.5 focus:border-rose-400 focus:shadow-lg focus:shadow-rose-100 focus:ring-4 focus:ring-rose-100"
+        ></textarea>
+
+        <div
+          class="mt-2 flex justify-between text-xs text-slate-400"
+        >
+
+          <span>
+            Este mensaje es opcional.
+          </span>
+
+          <span>
+            {{ mensaje.length }}/500
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- Información -->
+
+      <div
+        class="mb-7 rounded-2xl bg-rose-50 p-4 text-center text-sm leading-6 text-rose-800"
+      >
+        Cuando presiones enviar recibiré tu elección
+        y a ti también te llegará una pequeña confirmación.
+        Después solo tendrás que esperar un poquito... 💛
+      </div>
+
+
+      <!-- Botón -->
+
+      <button
+        type="submit"
+        [disabled]="enviando || enviado"
+        class="group flex w-full items-center justify-center gap-3 rounded-2xl bg-rose-500 px-6 py-4 text-base font-bold text-white shadow-lg shadow-rose-200 transition-all duration-300 hover:-translate-y-1 hover:bg-rose-600 hover:cursor-pointer hover:shadow-xl active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+      >
+
+        @if (enviando) {
+
+          <svg
+            class="h-5 w-5 animate-spin"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            ></path>
+          </svg>
+
+          <span>
+            Enviando nuestra cita...
+          </span>
+
+        } @else if (enviado) {
+
+          <span class="text-xl">
+            ✓
+          </span>
+
+          <span>
+            Elección enviada 💛
+          </span>
+
+        } @else {
+
+          <span
+            class="transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-125"
+          >
+            💌
+          </span>
+
+          <span>
+            Enviar mi elección ♡
+          </span>
+
+        }
+
+      </button>
+
+
+      @if (enviado) {
+
+        <div
+          class="mt-6 rounded-2xl border border-emerald-100 bg-emerald-50 p-5 text-center"
+        >
+
+          <div
+            class="mb-2 text-3xl animate-bounce"
+          >
+            💛
+          </div>
+
+          <p
+            class="font-bold text-emerald-800"
+          >
+            ¡Listo, amorcito!
+          </p>
+
+          <p
+            class="mt-1 text-sm leading-6 text-emerald-700"
+          >
+            Tu elección llegó correctamente.
+            Ahora mantente atenta...
+          </p>
+
+        </div>
+
+      }
+
+
+      <p
+        class="mt-5 text-center text-xs text-slate-400"
+      >
+        Preparado especialmente para ti.
+      </p>
+
+    </form>
+
+  </div>
+
+</section>

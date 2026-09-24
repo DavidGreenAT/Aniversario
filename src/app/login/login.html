@@ -1,0 +1,103 @@
+<section
+  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 px-4 py-10"
+>
+  <div
+    class="w-full max-w-[600px] rounded-3xl border border-white/70 bg-white/80 p-8 shadow-2xl shadow-rose-100/60 backdrop-blur-xl sm:p-10"
+  >
+    <div class="text-center">
+      <div
+        class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-rose-100 text-3xl shadow-sm"
+      >
+        ♡
+      </div>
+
+      <h1
+        class="text-3xl font-bold tracking-tight text-slate-800 sm:text-4xl"
+      >
+        ¡Hola, amor!
+      </h1>
+
+      <h2
+        class="mt-2 text-xl font-semibold text-rose-500 sm:text-2xl"
+      >
+        Bienvenida a nuestro aniversario
+      </h2>
+
+      <p
+        class="mt-4 text-sm leading-6 text-slate-500 sm:text-base"
+      >
+        Por favor, ingresa tus datos para poder acceder a algo muy especial
+        que preparé para ti.
+      </p>
+    </div>
+
+    <!-- Formulario -->
+    <div class="mt-8">
+      <form
+        class="space-y-5"
+        (submit)="validarUsuario(usuario.value, contrasenia.value); $event.preventDefault()"
+      >
+        <div>
+          <label
+            for="user"
+            class="mb-2 block text-sm font-medium text-slate-700"
+          >
+            Usuario
+          </label>
+
+          <input
+            #usuario
+            type="text"
+            id="user"
+            name="user"
+            placeholder="Tu usuario especial es: amorcito"
+            autocomplete="username"
+            class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+          />
+        </div>
+
+        <div>
+          <label
+            for="password"
+            class="mb-2 block text-sm font-medium text-slate-700"
+          >
+            Contraseña
+          </label>
+
+          <input
+            #contrasenia
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Ingresa nuestra fecha"
+            autocomplete="current-password"
+            class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full rounded-xl bg-rose-500 px-5 py-3.5 font-semibold text-white shadow-lg shadow-rose-200 transition duration-300 hover:-translate-y-0.5 hover:bg-rose-600 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-rose-200 hover:cursor-pointer active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+        >
+          Ingresar ♡
+        </button>
+      </form>
+
+      <!-- Pista -->
+      <div
+        class="mt-6 rounded-2xl border border-amber-100 bg-amber-50/80 p-4 text-center"
+      >
+        <p class="text-sm leading-6 text-amber-800">
+          <span class="font-semibold">Una pequeña pista:</span><br />
+          Para saber cuál es la contraseña, recuerda nuestra primera fecha,
+          donde todo comenzó. ✨
+        </p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <p class="mt-8 text-center text-xs text-slate-400">
+      Preparado con mucho amor para ti.
+    </p>
+  </div>
+</section>

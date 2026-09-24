@@ -1,0 +1,334 @@
+<main class="mundo">
+  <div class="contenido">
+
+    <nav
+      class="barra"
+      aria-label="Navegación del puzzle"
+    >
+      <a routerLink="/amorcito">
+        ← Volver a nuestro mundo
+      </a>
+
+      <span>
+        PUZZLE 02 · PARA ARIANA
+      </span>
+    </nav>
+
+    <header class="encabezado">
+      <span class="etiqueta">
+        UN PASILLO HECHO DE RECUERDOS
+      </span>
+
+      <h1>
+        Seis puertas.
+        <br>
+        <em>Una historia: nosotros.</em>
+      </h1>
+
+      <p>
+        Cada puerta guarda algo nuestro.
+        Encuentra las respuestas y descubre
+        lo que te espera al final.
+      </p>
+
+      <div
+        class="contador"
+        aria-live="polite"
+      >
+        {{ resueltas().length }}
+        de 6 llaves encontradas
+      </div>
+
+      <progress
+        max="100"
+        [value]="porcentaje()"
+        aria-label="Progreso de las seis puertas"
+      ></progress>
+    </header>
+
+    <section
+      class="puertas"
+      aria-label="Selecciona una puerta"
+    >
+      @for (
+        puerta of puertas;
+        track puerta.id
+      ) {
+        <button
+          type="button"
+          class="tarjeta"
+          [class.resuelta]="estaResuelta(puerta.id)"
+          [class.seleccionada]="seleccionada() === puerta.id"
+          [style.--color-puerta]="puerta.color"
+          [attr.aria-pressed]="seleccionada() === puerta.id"
+          [attr.aria-label]="
+            'Puerta ' +
+            puerta.id +
+            ': ' +
+            puerta.titulo +
+            (
+              estaResuelta(puerta.id)
+                ? ', abierta'
+                : ', cerrada'
+            )
+          "
+          aria-controls="acertijo"
+          (click)="seleccionarPuerta(puerta)"
+        >
+          <span class="numero">
+            0{{ puerta.id }}
+          </span>
+
+          <span
+            class="marco"
+            aria-hidden="true"
+          >
+            <span class="luz">
+              ♡
+            </span>
+
+            <span class="hoja">
+              <span class="panel"></span>
+
+              <span class="cerradura">
+                ●
+              </span>
+            </span>
+          </span>
+
+          <strong>
+            {{ puerta.titulo }}
+          </strong>
+
+          <span class="estado">
+            {{
+              estaResuelta(puerta.id)
+                ? '🗝 Llave encontrada'
+                : 'Toca para descubrir'
+            }}
+          </span>
+        </button>
+      }
+    </section>
+
+    <section
+      id="acertijo"
+      class="acertijo"
+      aria-labelledby="titulo-acertijo"
+    >
+      @if (puertaActiva(); as puerta) {
+
+        <span class="etiqueta">
+          PUERTA 0{{ puerta.id }}
+        </span>
+
+        <h2 id="titulo-acertijo">
+          {{ puerta.titulo }}
+        </h2>
+
+        @if (estaResuelta(puerta.id)) {
+
+          <div
+            class="recuerdo"
+            role="status"
+          >
+            <span
+              class="llave"
+              aria-hidden="true"
+            >
+              🗝
+            </span>
+
+            <h3>
+              Este recuerdo ya tiene su llave.
+            </h3>
+
+            <p>
+              {{ puerta.mensaje }}
+            </p>
+
+            @if (!completado()) {
+              <small>
+                Elige otra puerta para continuar.
+              </small>
+            }
+          </div>
+
+        } @else {
+
+          <form
+            (ngSubmit)="comprobarRespuesta()"
+          >
+            <label for="respuesta">
+              {{ puerta.pregunta }}
+            </label>
+
+            <input
+              id="respuesta"
+              name="respuesta"
+              type="text"
+              autocomplete="off"
+              maxlength="180"
+              placeholder="Escribe aquí nuestro recuerdo…"
+              [ngModel]="respuesta()"
+              (ngModelChange)="actualizarRespuesta($event)"
+              [attr.aria-invalid]="error() ? 'true' : 'false'"
+              aria-describedby="feedback pista"
+            >
+
+            <div class="acciones">
+              <button
+                type="submit"
+                class="primario"
+              >
+                Probar mi llave ♡
+              </button>
+
+              <button
+                type="button"
+                class="secundario"
+                (click)="mostrarPista()"
+                [attr.aria-expanded]="pistaVisible()"
+                aria-controls="pista"
+              >
+                {{
+                  pistaVisible()
+                    ? 'Ocultar pista'
+                    : 'Dame una pista'
+                }}
+              </button>
+            </div>
+
+            <p
+              id="feedback"
+              class="error"
+              role="status"
+            >{{ error() }}</p>
+
+            <p
+              id="pista"
+              class="pista"
+            >{{ pistaVisible() ? puerta.pista : '' }}</p>
+          </form>
+
+        }
+
+      } @else {
+
+        <h2 id="titulo-acertijo">
+          ¿Por dónde quieres empezar?
+        </h2>
+
+        <p>
+          Elige una puerta. No hay prisa:
+          los recuerdos bonitos merecen su tiempo.
+        </p>
+
+      }
+    </section>
+
+    @if (completado()) {
+
+      <section
+        class="final"
+        aria-labelledby="titulo-final"
+      >
+        <span class="etiqueta">
+          LAS SEIS LLAVES YA SON TUYAS
+        </span>
+
+        <h2 id="titulo-final">
+          Sabía que encontrarías el camino.
+        </h2>
+
+        <p>
+          Al final de todas estas puertas,
+          siempre estás tú.
+        </p>
+
+        @if (!cartaAbierta()) {
+
+          <button
+            type="button"
+            class="sobre"
+            (click)="abrirCarta()"
+            aria-label="Abrir la segunda carta"
+          >
+            <span aria-hidden="true">
+              💌
+            </span>
+
+            <strong>
+              Hay una carta para ti
+            </strong>
+
+            <small>
+              Toca para abrirla
+            </small>
+          </button>
+
+        } @else {
+
+          <article class="carta">
+            <span class="etiqueta">
+              CARTA 02
+            </span>
+
+            <h3>
+              {{ tituloCarta }}
+            </h3>
+
+            <p>{{ textoCarta }}</p>
+          </article>
+
+          <div class="acciones centradas">
+
+            <button
+              type="button"
+              class="primario"
+              (click)="guardarCarta()"
+              [disabled]="cartaGuardada()"
+            >
+              {{
+                cartaGuardada()
+                  ? 'Carta guardada ✓'
+                  : 'Guardar mi carta ♡'
+              }}
+            </button>
+
+            <a
+              class="secundario"
+              routerLink="/amorcito"
+            >
+              Volver a nuestro mundo
+            </a>
+
+          </div>
+
+          @if (cartaGuardada()) {
+            <p
+              class="confirmacion"
+              role="status"
+            >
+              Tu carta está en “Mis cartas”
+              y el Puzzle 2 quedó completado 💛
+            </p>
+          }
+
+        }
+      </section>
+
+    }
+
+    <p
+      class="aviso"
+      role="status"
+    >{{ aviso() }}</p>
+
+    <footer>
+      Seis pequeños recuerdos.
+      Infinitas razones para elegirte. ♡
+    </footer>
+
+  </div>
+</main>

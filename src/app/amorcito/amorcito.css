@@ -1,0 +1,40 @@
+:host {
+  display: block;
+  background: #111116;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.nav-btn {
+  border-radius: 0.75rem;
+  padding: 0.6rem 0.9rem;
+  color: #b0b7bd;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.nav-btn:hover {
+  color: #e8c848;
+  background: rgba(232, 200, 72, 0.08);
+  transform: translateY(-2px);
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #4db0c6;
+}
+
+.section-title {
+  margin-top: 0.5rem;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  color: white;
+}

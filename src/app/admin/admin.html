@@ -1,0 +1,302 @@
+<section
+  class="min-h-screen bg-slate-950 px-4 py-10 text-white"
+>
+
+  <div
+    class="mx-auto w-full max-w-5xl"
+  >
+
+    <!-- HEADER -->
+
+    <div
+      class="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"
+    >
+
+      <div>
+
+        <p
+          class="mb-2 text-sm font-semibold uppercase tracking-[0.25em] text-rose-400"
+        >
+          Panel privado
+        </p>
+
+        <h1
+          class="text-3xl font-bold sm:text-4xl"
+        >
+          Aniversario 💛
+        </h1>
+
+        <p
+          class="mt-3 max-w-xl text-slate-400"
+        >
+          Desde aquí puedes controlar las pistas
+          y enviar mensajes especiales.
+        </p>
+
+      </div>
+
+      <div
+        class="rounded-2xl border border-white/10 bg-white/5 px-5 py-3"
+      >
+        <p class="text-xs text-slate-500">
+          Fecha especial
+        </p>
+
+        <p class="mt-1 font-semibold">
+          28 de septiembre 💛
+        </p>
+      </div>
+
+    </div>
+
+
+    <!-- CLAVE -->
+
+    <div
+      class="mb-8 rounded-3xl border border-white/10 bg-white/5 p-6"
+    >
+
+      <label
+        class="mb-2 block text-sm font-medium text-slate-300"
+      >
+        Clave administrativa
+      </label>
+
+      <input
+        type="password"
+        [(ngModel)]="claveAdmin"
+        placeholder="Ingresa tu clave"
+        class="w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10"
+      />
+
+    </div>
+
+
+    <!-- PUZZLES -->
+
+    <div class="mb-10">
+
+      <div class="mb-5">
+
+        <h2
+          class="text-xl font-bold"
+        >
+          Secuencia de puzzles
+        </h2>
+
+        <p
+          class="mt-1 text-sm text-slate-400"
+        >
+          Envía cada pista cuando llegue el momento.
+        </p>
+
+      </div>
+
+
+      <div
+        class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+      >
+
+        @for (numero of [1, 2, 3, 4]; track numero) {
+
+          <div
+            class="group rounded-3xl border border-white/10 bg-white/5 p-5 transition duration-300 hover:-translate-y-1 hover:border-rose-500/40 hover:bg-white/[0.08]"
+          >
+
+            <div
+              class="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-500/10 text-2xl transition group-hover:scale-110"
+            >
+              🧩
+            </div>
+
+            <p
+              class="text-xs font-semibold uppercase tracking-wider text-slate-500"
+            >
+              Pista
+            </p>
+
+            <h3
+              class="mt-1 text-xl font-bold"
+            >
+              Puzzle {{ numero }}
+            </h3>
+
+            <button
+              type="button"
+              (click)="enviarPuzzle(numero)"
+              [disabled]="puzzleEnviando !== null"
+              class="mt-6 w-full rounded-xl bg-rose-500 px-4 py-3 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-rose-600 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+
+              @if (puzzleEnviando === numero) {
+
+                <span
+                  class="flex items-center justify-center gap-2"
+                >
+
+                  <span
+                    class="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white"
+                  ></span>
+
+                  Enviando...
+
+                </span>
+
+              } @else {
+
+                Enviar Puzzle {{ numero }}
+
+              }
+
+            </button>
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+
+
+    <!-- CORREO PERSONALIZADO -->
+
+    <div
+      class="rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-8"
+    >
+
+      <div class="mb-6">
+
+        <p
+          class="text-sm font-semibold text-amber-400"
+        >
+          💌 Mensaje especial
+        </p>
+
+        <h2
+          class="mt-2 text-2xl font-bold"
+        >
+          Redactar correo
+        </h2>
+
+        <p
+          class="mt-2 text-sm text-slate-400"
+        >
+          Úsalo si necesitas contarle algo que no forme
+          parte de los puzzles.
+        </p>
+
+      </div>
+
+
+      <div class="space-y-5">
+
+        <div>
+
+          <label
+            class="mb-2 block text-sm text-slate-300"
+          >
+            Asunto
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="asunto"
+            maxlength="100"
+            placeholder="Ej. Tengo algo importante que decirte..."
+            class="w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none transition placeholder:text-slate-600 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10"
+          />
+
+        </div>
+
+
+        <div>
+
+          <div
+            class="mb-2 flex justify-between"
+          >
+
+            <label
+              class="text-sm text-slate-300"
+            >
+              Mensaje
+            </label>
+
+            <span
+              class="text-xs text-slate-600"
+            >
+              {{ mensaje.length }} caracteres
+            </span>
+
+          </div>
+
+          <textarea
+            [(ngModel)]="mensaje"
+            rows="8"
+            maxlength="2000"
+            placeholder="Escribe aquí lo que quieras decirle..."
+            class="w-full resize-none rounded-xl border border-white/10 bg-slate-900 px-4 py-3 leading-7 outline-none transition placeholder:text-slate-600 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10"
+          ></textarea>
+
+        </div>
+
+
+        <button
+          type="button"
+          (click)="enviarCorreoPersonalizado()"
+          [disabled]="enviandoCorreo"
+          class="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-5 py-4 font-bold text-slate-950 transition hover:-translate-y-0.5 hover:bg-amber-300 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+
+          @if (enviandoCorreo) {
+
+            <span
+              class="h-5 w-5 animate-spin rounded-full border-2 border-slate-900/30 border-t-slate-900"
+            ></span>
+
+            Enviando...
+
+          } @else {
+
+            💌 Enviar correo especial
+
+          }
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- TOAST -->
+
+    @if (notificacion.visible) {
+
+      <div
+        class="fixed bottom-6 right-6 max-w-sm rounded-2xl border px-5 py-4 shadow-2xl backdrop-blur-xl"
+        [class.border-emerald-500/30]="
+          notificacion.tipo === 'success'
+        "
+        [class.bg-emerald-950/90]="
+          notificacion.tipo === 'success'
+        "
+        [class.border-red-500/30]="
+          notificacion.tipo === 'error'
+        "
+        [class.bg-red-950/90]="
+          notificacion.tipo === 'error'
+        "
+      >
+
+        <p class="text-sm font-semibold">
+          {{ notificacion.mensaje }}
+        </p>
+
+      </div>
+
+    }
+
+  </div>
+
+</section>

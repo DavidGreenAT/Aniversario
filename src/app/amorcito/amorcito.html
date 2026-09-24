@@ -1,0 +1,937 @@
+<section
+  class="min-h-screen bg-[#111116] text-white"
+>
+
+  <!-- NAV -->
+
+  <nav
+    class="sticky top-0 z-40 border-b border-white/10 bg-[#111116]/90 backdrop-blur-xl"
+  >
+
+    <div
+      class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4"
+    >
+
+      <div>
+
+        <p
+          class="text-xs font-bold uppercase tracking-[0.25em] text-[#e8c848]"
+        >
+          28 · 09 · 2026
+        </p>
+
+        <p
+          class="font-bold"
+        >
+          Nuestro pequeño mundo ♡
+        </p>
+
+      </div>
+
+
+      <div
+        class="hidden gap-2 md:flex"
+      >
+
+        <button
+          (click)="irA('inicio')"
+          class="nav-btn"
+        >
+          Inicio
+        </button>
+
+        <button
+          (click)="irA('cartas')"
+          class="nav-btn"
+        >
+          Mis cartas
+        </button>
+
+        <button
+          (click)="irA('mis-outfits')"
+          class="nav-btn"
+        >
+          Mis outfits
+        </button>
+
+        <button
+          (click)="irA('puzzles')"
+          class="nav-btn"
+        >
+          Puzzles
+        </button>
+
+        <button
+          (click)="irA('closet')"
+          class="nav-btn"
+        >
+          Mi closet
+        </button>
+
+      </div>
+
+    </div>
+
+  </nav>
+
+
+  <!-- HERO -->
+
+  <section
+    id="inicio"
+    class="relative overflow-hidden px-4 py-14 lg:py-20"
+  >
+
+    <div
+      class="absolute -left-40 top-20 h-96 w-96 rounded-full bg-[#2b1b60]/60 blur-3xl"
+    ></div>
+
+    <div
+      class="absolute -right-40 top-0 h-96 w-96 rounded-full bg-[#005cbf]/30 blur-3xl"
+    ></div>
+
+
+    <div
+      class="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.3fr_.7fr] lg:items-center"
+    >
+
+      <div>
+
+        <p
+          class="text-sm font-bold uppercase tracking-[0.35em] text-[#a3c139]"
+        >
+          Hola, pingüinita
+        </p>
+
+        <h1
+          class="mt-4 max-w-3xl text-4xl font-black leading-tight sm:text-6xl"
+        >
+          Bienvenida a
+          <span
+            class="text-[#e8c848]"
+          >
+            nuestro mundo
+          </span>
+        </h1>
+
+        <p
+          class="mt-6 max-w-2xl text-lg leading-8 text-[#b0b7bd]"
+        >
+          Aquí podrás guardar cada carta,
+          descubrir tus siguientes puzzles
+          y prepararte para nuestro día especial.
+        </p>
+
+
+        <div
+          class="mt-8 flex flex-wrap gap-3"
+        >
+
+          <button
+            (click)="irA('cartas')"
+            class="rounded-2xl bg-[#e8c848] px-6 py-3 font-bold text-[#111116] transition hover:-translate-y-1 hover:bg-[#d1b22a]"
+          >
+            Ver mis cartas 💌
+          </button>
+
+          <button
+            (click)="irA('closet')"
+            class="rounded-2xl border border-[#4db0c6]/50 bg-[#005cbf]/20 px-6 py-3 font-bold text-[#4db0c6] transition hover:-translate-y-1 hover:bg-[#005cbf]/30"
+          >
+            Abrir mi closet ✨
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="relative mx-auto w-full max-w-sm"
+      >
+
+        <div
+          class="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-[#e8c848] via-[#005cbf] to-[#652f5f] opacity-50 blur-xl"
+        ></div>
+
+        <img
+          src="/img/coraline.png"
+          alt="Nuestro mundo"
+          class="relative aspect-[4/5] w-full rounded-[2rem] object-contain shadow-2xl"
+        />
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- CONTADOR -->
+
+  <section
+    class="px-4 pb-14"
+  >
+
+    <div
+      class="mx-auto max-w-7xl rounded-3xl border border-[#e8c848]/20 bg-white/[0.04] p-6 sm:p-8"
+    >
+
+      <div
+        class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between"
+      >
+
+        <div>
+
+          <p
+            class="text-sm text-[#b0b7bd]"
+          >
+            Cada vez estamos más cerca...
+          </p>
+
+          <h2
+            class="mt-1 text-2xl font-bold"
+          >
+            Nuestro aniversario 💛
+          </h2>
+
+        </div>
+
+
+        <div
+          class="text-left md:text-right"
+        >
+
+          <p
+            class="text-5xl font-black text-[#e8c848]"
+          >
+            {{ diasRestantes }}
+          </p>
+
+          <p
+            class="text-sm text-[#b0b7bd]"
+          >
+            días para el 28 de septiembre
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="mt-7 h-4 overflow-hidden rounded-full bg-white/10"
+      >
+
+        <div
+          class="h-full rounded-full bg-gradient-to-r from-[#005cbf] via-[#4db0c6] to-[#e8c848] transition-all duration-1000"
+          [style.width.%]="progresoAniversario"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- CARTAS -->
+
+  <section
+    id="cartas"
+    class="px-4 py-14"
+  >
+
+    <div
+      class="mx-auto max-w-7xl"
+    >
+
+      <p
+        class="section-label"
+      >
+        Nuestro archivo
+      </p>
+
+      <h2
+        class="section-title"
+      >
+        Mis cartas 💌
+      </h2>
+
+
+      <div
+        class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3"
+      >
+
+        @if (
+          cartas.length === 0
+        ) {
+
+          <div
+            class="col-span-full rounded-3xl border border-dashed border-white/15 p-10 text-center text-[#b0b7bd]"
+          >
+            Todavía no hay cartas guardadas.
+          </div>
+
+        }
+
+
+        @for (
+          carta of cartas;
+          track carta.id
+        ) {
+
+          <article
+            class="group rounded-3xl border border-[#652f5f]/50 bg-[#652f5f]/15 p-6 transition duration-300 hover:-translate-y-2 hover:border-[#e8c848]/50"
+          >
+
+            <div
+              class="text-3xl"
+            >
+              ✉️
+            </div>
+
+            <h3
+              class="mt-5 text-xl font-bold text-[#e8c848]"
+            >
+              {{ carta.titulo }}
+            </h3>
+
+            <p
+              class="mt-3 line-clamp-4 whitespace-pre-line leading-7 text-[#b0b7bd]"
+            >
+              {{ carta.contenido }}
+            </p>
+
+            <button
+              type="button"
+              (click)="descargarCarta(carta)"
+              class="mt-5 rounded-xl bg-white/10 px-4 py-2 text-sm font-bold transition hover:bg-[#e8c848] hover:text-[#111116]"
+            >
+              Descargar carta ↓
+            </button>
+
+          </article>
+
+        }
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section
+  id="mis-outfits"
+  class="px-4 py-14"
+>
+
+  <div
+    class="mx-auto max-w-7xl"
+  >
+
+    <div
+      class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"
+    >
+
+      <div>
+
+        <p class="section-label">
+          Tu closet mágico
+        </p>
+
+        <h2 class="section-title">
+          Mis outfits ✨
+        </h2>
+
+        <p
+          class="mt-3 max-w-2xl text-[#b0b7bd]"
+        >
+          Aquí estarán todas las combinaciones
+          que hemos creado para ti.
+        </p>
+
+      </div>
+
+
+      <p
+        class="text-sm text-[#b0b7bd]"
+      >
+        {{ misOutfits.length }}
+        outfits
+      </p>
+
+    </div>
+
+
+    @if (
+      cargandoMisOutfits
+    ) {
+
+      <div
+        class="mt-8 rounded-3xl border border-white/10 bg-white/[0.04] p-10 text-center"
+      >
+
+        <div
+          class="mx-auto h-9 w-9 animate-spin rounded-full border-4 border-white/10 border-t-[#e8c848]"
+        ></div>
+
+        <p
+          class="mt-4 text-[#b0b7bd]"
+        >
+          Buscando tus outfits...
+        </p>
+
+      </div>
+
+    } @else if (
+      misOutfits.length === 0
+    ) {
+
+      <div
+        class="mt-8 rounded-3xl border border-dashed border-white/15 p-10 text-center"
+      >
+
+        <div class="text-4xl">
+          👗
+        </div>
+
+        <p
+          class="mt-4 font-bold text-white"
+        >
+          Todavía no tienes outfits
+        </p>
+
+        <p
+          class="mt-2 text-sm text-[#b0b7bd]"
+        >
+          Cuando generemos los primeros aparecerán aquí.
+        </p>
+
+      </div>
+
+    } @else {
+
+      <div
+        class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+      >
+
+        @for (
+          outfit of misOutfits;
+          track outfit.id
+        ) {
+
+          <article
+            class="
+              group
+              overflow-hidden
+              rounded-3xl
+              border
+              border-white/10
+              bg-white/[0.04]
+              transition
+              duration-300
+              hover:-translate-y-2
+              hover:border-[#4db0c6]/40
+            "
+          >
+
+            <div
+              class="overflow-hidden"
+            >
+
+              <img
+                [src]="outfit.imagen"
+                alt="Outfit guardado"
+                class="
+                  aspect-[2/3]
+                  w-full
+                  object-cover
+                  transition
+                  duration-500
+                  group-hover:scale-[1.03]
+                "
+              />
+
+            </div>
+
+
+            <div class="p-5">
+
+              <p
+                class="text-xs font-bold uppercase tracking-[0.2em] text-[#4db0c6]"
+              >
+                Nuestro closet
+              </p>
+
+
+              <p
+                class="mt-2 font-bold"
+              >
+                Outfit ✨
+              </p>
+
+
+              <p
+                class="mt-2 text-xs text-[#b0b7bd]"
+              >
+                {{
+                  outfit.fecha
+                    | date:'dd/MM/yyyy · HH:mm'
+                }}
+              </p>
+
+
+              <button
+                type="button"
+                (click)="descargarOutfit(outfit.archivo)"
+                class="
+                  mt-5
+                  w-full
+                  rounded-2xl
+                  bg-[#e8c848]
+                  px-5
+                  py-3
+                  font-black
+                  text-[#111116]
+                  transition
+                  hover:-translate-y-1
+                  hover:bg-[#d1b22a]
+                "
+              >
+                💛 Guardar outfit
+              </button>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    }
+
+  </div>
+
+</section>
+
+
+  <!-- PUZZLES -->
+
+  <section
+    id="puzzles"
+    class="px-4 py-14"
+  >
+
+    <div
+      class="mx-auto max-w-7xl"
+    >
+
+      <p class="section-label">
+        El camino continúa
+      </p>
+
+      <h2 class="section-title">
+        Nuestros puzzles 🧩
+      </h2>
+
+
+      <div
+        class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+      >
+
+        @for (
+          numero of [1,2,3,4];
+          track numero
+        ) {
+
+          <div
+            class="rounded-3xl border p-6 transition hover:-translate-y-1"
+            [class.border-[#a3c139]/50]="puzzleCompletado(numero)"
+            [class.bg-[#a3c139]/10]="puzzleCompletado(numero)"
+            [class.border-white/10]="!puzzleCompletado(numero)"
+            [class.bg-white/[0.04]]="!puzzleCompletado(numero)"
+          >
+
+            <div
+              class="text-3xl"
+            >
+              {{
+                puzzleCompletado(numero)
+                  ? '💚'
+                  : '🔒'
+              }}
+            </div>
+
+            <p
+              class="mt-5 text-xs font-bold uppercase tracking-wider text-[#b0b7bd]"
+            >
+              Día {{ numero }}
+            </p>
+
+            <h3
+              class="mt-1 text-xl font-bold"
+            >
+              Puzzle {{ numero }}
+            </h3>
+
+
+            @if (
+              puzzleCompletado(numero)
+            ) {
+
+              <p
+                class="mt-4 font-semibold text-[#a3c139]"
+              >
+                Completado ✓
+              </p>
+
+            } @else {
+
+              <p
+                class="mt-4 text-sm text-[#b0b7bd]"
+              >
+                Aún no es momento de abrirlo.
+              </p>
+
+            }
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- CLOSET -->
+
+  <section
+    id="closet"
+    class="px-4 py-16"
+  >
+
+    <div
+      class="mx-auto max-w-7xl"
+    >
+
+      <div
+        class="rounded-[2rem] border border-[#005cbf]/30 bg-gradient-to-br from-[#2b1b60]/60 via-[#111116] to-[#005cbf]/20 p-6 sm:p-10"
+      >
+
+        <p
+          class="text-sm font-bold uppercase tracking-[0.3em] text-[#4db0c6]"
+        >
+          Tu closet mágico
+        </p>
+
+        <h2
+          class="mt-3 max-w-3xl text-3xl font-black sm:text-4xl"
+        >
+          ¿No sabes qué ponerte?
+        </h2>
+
+        <p
+          class="mt-4 max-w-3xl text-lg leading-8 text-[#b0b7bd]"
+        >
+          No te preocupes amor.
+          Sube imágenes de tu ropa y te ayudaré
+          a crear outfits usando prendas de tu propio closet.
+        </p>
+
+
+        <div
+          class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+        >
+
+          @for (
+            categoria of categorias;
+            track categoria.key
+          ) {
+
+            <div
+              class="rounded-3xl border border-white/10 bg-black/20 p-5"
+            >
+
+              <div
+                class="text-3xl"
+              >
+                {{ categoria.emoji }}
+              </div>
+
+              <h3
+                class="mt-3 font-bold"
+              >
+                {{ categoria.titulo }}
+              </h3>
+
+              <p
+                class="mt-1 text-sm leading-6 text-[#b0b7bd]"
+              >
+                {{ categoria.descripcion }}
+              </p>
+
+
+              <label
+                class="mt-5 flex cursor-pointer items-center justify-center rounded-xl border border-dashed border-[#4db0c6]/50 px-3 py-3 text-sm font-bold text-[#4db0c6] transition hover:bg-[#4db0c6]/10"
+              >
+
+                + Agregar prendas
+
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  multiple
+                  class="hidden"
+                  (change)="seleccionarArchivos($event, categoria.key)"
+                />
+
+              </label>
+
+
+              <div
+                class="mt-4 grid grid-cols-3 gap-2"
+              >
+
+                @for (
+                  preview of previews[categoria.key];
+                  track preview;
+                  let i = $index
+                ) {
+
+                  <div
+                    class="group relative aspect-square overflow-hidden rounded-xl"
+                  >
+
+                    <img
+                      [src]="preview"
+                      class="h-full w-full object-cover"
+                    />
+
+                    <button
+                      type="button"
+                      (click)="eliminarPrenda(categoria.key, i)"
+                      class="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-[#111116]/80 text-xs opacity-0 transition group-hover:opacity-100"
+                    >
+                      ✕
+                    </button>
+
+                  </div>
+
+                }
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+
+        <div
+          class="mt-8 flex flex-wrap items-center gap-4"
+        >
+
+          <button
+            type="button"
+            (click)="generarOutfits()"
+            [disabled]="generandoOutfits"
+            class="rounded-2xl bg-[#e8c848] px-7 py-4 font-black text-[#111116] shadow-lg shadow-[#e8c848]/10 transition hover:-translate-y-1 hover:bg-[#d1b22a] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+
+            @if (
+              generandoOutfits
+            ) {
+
+              <span
+                class="flex items-center gap-3"
+              >
+
+                <span
+                  class="h-5 w-5 animate-spin rounded-full border-2 border-[#111116]/30 border-t-[#111116]"
+                ></span>
+
+                Creando tus outfits...
+
+              </span>
+
+            } @else {
+
+              ✨ Generar 3 outfits
+
+            }
+
+          </button>
+
+
+          @if (
+            outfits.length > 0
+          ) {
+
+            <button
+              type="button"
+              (click)="regenerarOutfits()"
+              [disabled]="generandoOutfits"
+              class="rounded-2xl border border-[#4db0c6]/50 px-7 py-4 font-bold text-[#4db0c6] transition hover:bg-[#4db0c6]/10"
+            >
+              ↻ Regenerar
+            </button>
+
+          }
+
+
+          <span
+            class="text-sm text-[#b0b7bd]"
+          >
+            {{ totalPrendas }}
+            prendas cargadas
+          </span>
+
+        </div>
+
+
+        @if (
+          errorOutfits
+        ) {
+
+          <div
+            class="mt-5 rounded-2xl border border-red-500/30 bg-red-950/30 p-4 text-sm text-red-200"
+          >
+            {{ errorOutfits }}
+          </div>
+
+        }
+
+
+        @if (
+          generandoOutfits
+        ) {
+
+          <div
+            class="mt-10 rounded-3xl border border-[#e8c848]/20 bg-black/20 p-10 text-center"
+          >
+
+            <div
+              class="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-white/10 border-t-[#e8c848]"
+            ></div>
+
+            <p
+              class="mt-5 font-bold text-[#e8c848]"
+            >
+              Estoy revisando tu closet...
+            </p>
+
+            <p
+              class="mt-2 text-sm text-[#b0b7bd]"
+            >
+              Voy a preparar tres combinaciones diferentes para ti.
+            </p>
+
+          </div>
+
+        }
+
+
+        @if (
+          outfits.length > 0 &&
+          !generandoOutfits
+        ) {
+
+          <div
+            class="mt-12"
+          >
+
+            <p
+              class="section-label"
+            >
+              Tus propuestas
+            </p>
+
+            <h3
+              class="mt-2 text-3xl font-black"
+            >
+              Tres formas de verte increíble ✨
+            </h3>
+
+
+            <div
+              class="mt-7 grid gap-6 md:grid-cols-3"
+            >
+
+              @for (
+                outfit of outfits;
+                track outfit;
+                let i = $index
+              ) {
+
+                <article
+                  class="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] transition duration-300 hover:-translate-y-2 hover:border-[#e8c848]/40"
+                >
+
+                  <img
+                    [src]="outfit"
+                    [alt]="'Outfit ' + (i + 1)"
+                    class="aspect-[2/3] w-full object-cover"
+                  />
+
+                  <div
+                    class="p-5"
+                  >
+
+                    <p
+                      class="text-xs font-bold uppercase tracking-[0.2em] text-[#4db0c6]"
+                    >
+                      Propuesta {{ i + 1 }}
+                    </p>
+
+                    <p
+                      class="mt-2 font-bold"
+                    >
+                      Outfit para nuestra cita ♡
+                    </p>
+
+                    <button
+                      type="button"
+                      (click)="guardarOutfitEnDispositivo(outfit)"
+                      class="
+                        mt-5
+                        w-full
+                        rounded-2xl
+                        bg-[#e8c848]
+                        px-5
+                        py-3
+                        font-black
+                        text-[#111116]
+                        transition
+                        duration-300
+                        hover:-translate-y-1
+                        hover:bg-[#d1b22a]
+                      "
+                    >
+                      💛 Guardar outfit
+                    </button>
+
+                  </div>
+
+                </article>
+
+              }
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+
+  </section>
+
+</section>

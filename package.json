@@ -4,6 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "server": "node server/servidor.js",
+    "invitacion": "node server/invitacion.js",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -17,7 +19,12 @@
     "@angular/forms": "^22.1.0",
     "@angular/platform-browser": "^22.1.0",
     "@angular/router": "^22.1.0",
+    "busboy": "^1.6.0",
+    "dotenv": "^18.0.3",
+    "nodemailer": "^10.0.10",
+    "openai": "^7.23.0",
     "rxjs": "~7.8.0",
+    "sharp": "^0.35.4",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
