@@ -23,10 +23,6 @@ import path from "node:path";
 
 const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor ejecutándose en puerto ${PORT}`);
-});
-
 const MI_EMAIL =
   process.env.MI_EMAIL?.trim();
 
@@ -1876,6 +1872,7 @@ const server =
 
 server.listen(
   PORT,
+  "0.0.0.0",
   () => {
 
     console.log("");
@@ -1884,7 +1881,7 @@ server.listen(
     );
 
     console.log(
-      `💛 Servidor funcionando en http://localhost:${PORT}`
+      `💛 Servidor funcionando en puerto ${PORT}`
     );
 
     console.log(
