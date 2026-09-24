@@ -75,7 +75,7 @@ function responder(res, codigo, datos) {
       "application/json; charset=utf-8",
 
     "Access-Control-Allow-Origin":
-      "http://localhost:4200",
+      "https://aniversario-1-zupf.onrender.com",
 
     "Access-Control-Allow-Methods":
       "GET, POST, OPTIONS",
@@ -437,7 +437,7 @@ const server =
                 "public, max-age=86400",
 
               "Access-Control-Allow-Origin":
-                "http://localhost:4200"
+                "https://aniversario-1-zupf.onrender.com"
             }
           );
 
@@ -600,7 +600,7 @@ const server =
                 `attachment; filename="${nombreDescarga}"`,
 
               "Access-Control-Allow-Origin":
-                "http://localhost:4200"
+                "https://aniversario-1-zupf.onrender.com"
             }
           );
 

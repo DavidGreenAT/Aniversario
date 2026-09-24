@@ -65,7 +65,7 @@ export class Admin {
         ok: boolean;
         mensaje: string;
       }>(
-        'http://localhost:3000/api/admin/puzzle',
+        'https://aniversario-mb40.onrender.com/api/admin/puzzle',
         {
           numero
         },
@@ -202,7 +202,7 @@ export class Admin {
       ok: boolean;
       mensaje: string;
     }>(
-      'http://localhost:3000/api/admin/correo',
+      'https://aniversario-mb40.onrender.com/api/admin/correo',
       {
         asunto:
           this.asunto,

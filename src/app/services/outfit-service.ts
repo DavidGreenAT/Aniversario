@@ -55,7 +55,7 @@ export class OutfitService {
     inject(HttpClient);
 
   private readonly apiUrl =
-    'http://localhost:3000';
+    'https://aniversario-mb40.onrender.com';
 
 
   generarOutfits(
