@@ -2,6 +2,8 @@ import http from "node:http";
 
 import { enviarCorreo } from "./mail.js";
 
+import { enviarInvitacion } from "./invitador.js";
+
 import {
   obtenerPuzzle,
   generarCorreoPuzzle
@@ -800,6 +802,78 @@ const server =
       }
 
       return;
+      }
+
+      /*
+      * ===============================================
+      * ADMIN - ENVIAR INVITACIÓN INICIAL
+      * ===============================================
+      */
+
+      if (
+        req.method === "POST" &&
+        req.url === "/api/admin/invitacion"
+      ) {
+
+        if (!validarAdmin(req)) {
+
+          responder(
+            res,
+            401,
+            {
+              ok: false,
+              mensaje:
+                "Clave administrativa incorrecta."
+            }
+          );
+
+          return;
+        }
+
+        try {
+
+          console.log(
+            "💌 Solicitud para enviar invitación inicial"
+          );
+
+          const info =
+            await enviarInvitacion();
+
+          responder(
+            res,
+            200,
+            {
+              ok: true,
+              mensaje:
+                "Invitación enviada correctamente 💛",
+              destinatario:
+                PAREJA_EMAIL,
+              messageId:
+                info.messageId
+            }
+          );
+
+        } catch (error) {
+
+          console.error(
+            "❌ Error enviando invitación inicial:"
+          );
+
+          console.error(error);
+
+          responder(
+            res,
+            500,
+            {
+              ok: false,
+              mensaje:
+                "No se pudo enviar la invitación."
+            }
+          );
+
+        }
+
+        return;
       }
 
       /*

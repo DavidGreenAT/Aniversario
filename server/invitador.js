@@ -1,12 +1,18 @@
 import { enviarCorreo } from "./mail.js";
 
-async function enviarInvitacion() {
+export async function enviarInvitacion() {
   try {
     console.log("💌 Enviando invitación...");
 
-    const info = await enviarCorreo(
+    const destinatarios = [
       process.env.PAREJA_EMAIL,
-      "Hay algo especial que se acerca 💛",
+      process.env.OTRO_EMAIL
+    ];
+
+    const asunto =
+      "Hay algo especial que se acerca 💛";
+
+    const html =(
       `
       <div style="
         margin:0;
@@ -76,9 +82,7 @@ async function enviarInvitacion() {
             border-radius:15px;
           ">
             <p>💛 Miércoles 30 de septiembre — 6:00 p.m.</p>
-
             <p>💛 Jueves 1 de octubre — 6:00 p.m.</p>
-
             <p>💛 Sábado 3 de octubre — 5:00 p.m.</p>
           </div>
 
@@ -112,7 +116,7 @@ async function enviarInvitacion() {
           </p>
 
           <a
-            href="https://aniversario-1-zupf.onrender.com/login"
+            href="${process.env.APP_URL}/login"
             style="
               display:inline-block;
               margin-top:20px;
@@ -164,16 +168,76 @@ async function enviarInvitacion() {
       `
     );
 
-    console.log("✅ Invitación enviada correctamente");
-    console.log("📧 Destinatario:", process.env.PAREJA_EMAIL);
-    console.log("🆔 ID:", info.messageId);
+    const resultados = await Promise.allSettled(
+      destinatarios.map(
+        correo =>
+          enviarCorreo(
+            correo,
+            asunto,
+            html
+          )
+      )
+    );
+
+    resultados.forEach(
+      (resultado, index) => {
+
+        const correo =
+          destinatarios[index];
+
+        if (
+          resultado.status === "fulfilled"
+        ) {
+
+          console.log(
+            `✅ Invitación enviada a ${correo}`
+          );
+
+          console.log(
+            "🆔",
+            resultado.value.messageId
+          );
+
+        } else {
+
+          console.error(
+            `❌ Error enviando a ${correo}`
+          );
+
+          console.error(
+            resultado.reason
+          );
+
+        }
+
+      }
+    );
+
+    const enviados =
+      resultados.filter(
+        resultado =>
+          resultado.status === "fulfilled"
+      );
+
+    if (enviados.length === 0) {
+      throw new Error(
+        "No se pudo enviar ninguna invitación."
+      );
+    }
+
+    return {
+      enviados: enviados.length,
+      total: destinatarios.length
+    };
 
   } catch (error) {
 
-    console.error("❌ No se pudo enviar la invitación:");
+    console.error(
+      "❌ No se pudieron enviar las invitaciones:"
+    );
+
     console.error(error);
 
+    throw error;
   }
 }
-
-enviarInvitacion();
