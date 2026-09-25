@@ -71,6 +71,72 @@
 
     </div>
 
+    <!-- INVITACIÓN INICIAL -->
+    <div
+      class="mb-10 rounded-3xl border border-yellow-400/20 bg-yellow-400/5 p-6 sm:p-8"
+    >
+
+      <div
+        class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
+      >
+
+        <div>
+
+          <p
+            class="text-sm font-semibold text-yellow-400"
+          >
+            💛 Invitación inicial
+          </p>
+
+          <h2
+            class="mt-2 text-2xl font-bold"
+          >
+            Enviar primer correo
+          </h2>
+
+          <p
+            class="mt-2 max-w-xl text-sm leading-6 text-slate-400"
+          >
+            Envía manualmente el correo inicial con el enlace
+            para comenzar la experiencia.
+          </p>
+
+          <p
+            class="mt-2 text-xs text-slate-500"
+          >
+            Este correo no se envía automáticamente.
+          </p>
+
+        </div>
+
+
+        <button
+          type="button"
+          (click)="enviarInvitacionInicial()"
+          [disabled]="enviandoInvitacion"
+          class="flex min-w-52 items-center justify-center gap-2 rounded-xl bg-yellow-400 px-6 py-4 font-bold text-slate-950 transition hover:-translate-y-0.5 hover:bg-yellow-300 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+
+          @if (enviandoInvitacion) {
+
+            <span
+              class="h-5 w-5 animate-spin rounded-full border-2 border-slate-900/30 border-t-slate-900"
+            ></span>
+
+            Enviando...
+
+          } @else {
+
+            💌 Enviar invitación
+
+          }
+
+        </button>
+
+      </div>
+
+    </div>
+
 
     <!-- PUZZLES -->
 

@@ -20,6 +20,7 @@ export class Admin {
   claveAdmin = '';
 
   puzzleEnviando: number | null = null;
+  enviandoInvitacion = false;
 
   asunto = '';
   mensaje = '';
@@ -31,6 +32,129 @@ export class Admin {
     tipo: 'success',
     mensaje: ''
   };
+
+  enviarInvitacionInicial(): void {
+
+  if (!this.claveAdmin.trim()) {
+
+    this.mostrarMensaje(
+      'error',
+      'Ingresa tu clave administrativa.'
+    );
+
+    return;
+  }
+
+
+  this.enviandoInvitacion = true;
+
+  this.cdr.detectChanges();
+
+
+  const headers =
+    new HttpHeaders({
+
+      'X-Admin-Token':
+        this.claveAdmin
+
+    });
+
+
+  this.http
+    .post<{
+
+      ok: boolean;
+
+      mensaje: string;
+
+      enviados: number;
+
+      total: number;
+
+      destinatarios: string[];
+
+    }>(
+
+      'https://aniversario-mb40.onrender.com/api/admin/invitacion',
+
+      {},
+
+      {
+        headers
+      }
+
+    )
+
+    .pipe(
+
+      finalize(
+        () => {
+
+          console.log(
+            '🏁 Terminó envío de invitación'
+          );
+
+
+          this.enviandoInvitacion =
+            false;
+
+
+          this.cdr
+            .detectChanges();
+
+        }
+      )
+
+    )
+
+    .subscribe({
+
+      next:
+        respuesta => {
+
+          console.log(
+            '✅ Invitación enviada:',
+            respuesta
+          );
+
+
+          this.mostrarMensaje(
+            'success',
+            `${respuesta.mensaje} (${respuesta.enviados}/${respuesta.total})`
+          );
+
+
+          this.cdr
+            .detectChanges();
+
+        },
+
+
+      error:
+        error => {
+
+          console.error(
+            '❌ Error enviando invitación:',
+            error
+          );
+
+
+          this.mostrarMensaje(
+            'error',
+
+            error?.error?.mensaje ||
+            'No se pudo enviar la invitación.'
+          );
+
+
+          this.cdr
+            .detectChanges();
+
+        }
+
+    });
+
+}
 
   enviarPuzzle(numero: number): void {
 
