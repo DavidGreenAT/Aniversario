@@ -2,18 +2,65 @@ import { enviarCorreo } from "./mail.js";
 
 export async function enviarInvitacion() {
   try {
-    console.log("💌 Enviando invitación...");
+
+    console.log("💌 Enviando invitaciones...");
+
+    /*
+     * =========================================================
+     * DESTINATARIOS
+     * =========================================================
+     */
 
     const destinatarios = [
-      process.env.PAREJA_EMAIL,
-      process.env.OTRO_EMAIL
-    ];
+      process.env.PAREJA_EMAIL?.trim(),
+      process.env.OTRO_EMAIL?.trim()
+    ].filter(Boolean);
+
+
+    /*
+     * Debemos tener exactamente
+     * los dos correos configurados.
+     */
+
+    if (destinatarios.length !== 2) {
+
+      throw new Error(
+        `Se esperaban 2 destinatarios, pero se encontraron ${destinatarios.length}. Revisa PAREJA_EMAIL y OTRO_EMAIL en Render.`
+      );
+
+    }
+
+
+    /*
+     * =========================================================
+     * URL FRONTEND
+     * =========================================================
+     */
+
+    const appUrl =
+      process.env.APP_URL?.trim();
+
+
+    if (!appUrl) {
+
+      throw new Error(
+        "Falta APP_URL en las variables de entorno."
+      );
+
+    }
+
+
+    /*
+     * =========================================================
+     * CORREO
+     * =========================================================
+     */
 
     const asunto =
       "Hay algo especial que se acerca 💛";
 
-    const html =(
-      `
+
+    const html = `
       <div style="
         margin:0;
         padding:40px 20px;
@@ -39,6 +86,7 @@ export async function enviarInvitacion() {
             💛
           </div>
 
+
           <h1 style="
             margin:0 0 25px;
             font-size:28px;
@@ -47,6 +95,7 @@ export async function enviarInvitacion() {
             Hola, pingüinita 🐧
           </h1>
 
+
           <p style="
             font-size:17px;
             line-height:1.8;
@@ -54,6 +103,7 @@ export async function enviarInvitacion() {
           ">
             Espero que te encuentres muy bien, amorcito.
           </p>
+
 
           <p style="
             font-size:17px;
@@ -65,6 +115,7 @@ export async function enviarInvitacion() {
             realmente especial.
           </p>
 
+
           <p style="
             font-size:17px;
             line-height:1.8;
@@ -75,16 +126,28 @@ export async function enviarInvitacion() {
             te funcione.
           </p>
 
+
           <div style="
             margin:25px 0;
             padding:20px;
             background:#fff8df;
             border-radius:15px;
           ">
-            <p>💛 Miércoles 30 de septiembre — 6:00 p.m.</p>
-            <p>💛 Jueves 1 de octubre — 6:00 p.m.</p>
-            <p>💛 Sábado 3 de octubre — 5:00 p.m.</p>
+
+            <p>
+              💛 Miércoles 30 de septiembre — 6:00 p.m.
+            </p>
+
+            <p>
+              💛 Jueves 1 de octubre — 6:00 p.m.
+            </p>
+
+            <p>
+              💛 Sábado 3 de octubre — 5:00 p.m.
+            </p>
+
           </div>
+
 
           <div style="
             margin:30px 0;
@@ -107,6 +170,7 @@ export async function enviarInvitacion() {
 
           </div>
 
+
           <p style="
             font-size:17px;
             line-height:1.8;
@@ -115,8 +179,9 @@ export async function enviarInvitacion() {
             Cuando estés lista, presiona el siguiente botón.
           </p>
 
+
           <a
-            href="${process.env.APP_URL}/login"
+            href="${appUrl}/login"
             style="
               display:inline-block;
               margin-top:20px;
@@ -131,6 +196,7 @@ export async function enviarInvitacion() {
             Elegir nuestra fecha 💛
           </a>
 
+
           <p style="
             margin-top:35px;
             font-size:17px;
@@ -141,6 +207,7 @@ export async function enviarInvitacion() {
             es solo el comienzo. Pronto recibirás algo más. 💌
           </p>
 
+
           <div style="
             width:60px;
             height:2px;
@@ -148,12 +215,14 @@ export async function enviarInvitacion() {
             margin:35px auto;
           "></div>
 
+
           <p style="
             font-size:20px;
             margin:0;
           ">
             Te amo infinitamente.
           </p>
+
 
           <p style="
             margin-top:10px;
@@ -165,19 +234,89 @@ export async function enviarInvitacion() {
         </div>
 
       </div>
-      `
+    `;
+
+
+    /*
+     * =========================================================
+     * LOG DESTINATARIOS
+     * =========================================================
+     */
+
+    console.log(
+      "📧 Destinatarios:",
+      destinatarios
     );
 
-    const resultados = await Promise.allSettled(
-      destinatarios.map(
-        correo =>
-          enviarCorreo(
-            correo,
-            asunto,
-            html
-          )
-      )
-    );
+
+    /*
+     * =========================================================
+     * ENVIAR A LOS DOS
+     * =========================================================
+     */
+
+    const resultados =
+      await Promise.allSettled(
+
+        destinatarios.map(
+
+          async correo => {
+
+            const info =
+              await enviarCorreo(
+                correo,
+                asunto,
+                html
+              );
+
+
+            /*
+             * Nodemailer puede resolver la promesa
+             * pero Gmail puede rechazar un destinatario.
+             */
+
+            if (
+              info.rejected &&
+              info.rejected.length > 0
+            ) {
+
+              throw new Error(
+                `Gmail rechazó el destinatario ${correo}: ${info.rejected.join(", ")}`
+              );
+
+            }
+
+
+            return {
+
+              correo,
+
+              messageId:
+                info.messageId,
+
+              accepted:
+                info.accepted,
+
+              rejected:
+                info.rejected,
+
+              response:
+                info.response
+
+            };
+
+          }
+
+        )
+
+      );
+
+
+    /*
+     * =========================================================
+     * RESULTADOS
+     * =========================================================
+     */
 
     resultados.forEach(
       (resultado, index) => {
@@ -185,8 +324,10 @@ export async function enviarInvitacion() {
         const correo =
           destinatarios[index];
 
+
         if (
-          resultado.status === "fulfilled"
+          resultado.status ===
+          "fulfilled"
         ) {
 
           console.log(
@@ -198,7 +339,19 @@ export async function enviarInvitacion() {
             resultado.value.messageId
           );
 
-        } else {
+          console.log(
+            "✅ Aceptados:",
+            resultado.value.accepted
+          );
+
+          console.log(
+            "❌ Rechazados:",
+            resultado.value.rejected
+          );
+
+        }
+
+        else {
 
           console.error(
             `❌ Error enviando a ${correo}`
@@ -213,31 +366,58 @@ export async function enviarInvitacion() {
       }
     );
 
+
     const enviados =
       resultados.filter(
         resultado =>
           resultado.status === "fulfilled"
+      ).length;
+
+
+    const total =
+      destinatarios.length;
+
+
+    /*
+     * Si uno de los dos falló,
+     * informamos que el proceso no fue completo.
+     */
+
+    if (enviados !== total) {
+
+      throw new Error(
+        `Solo se enviaron ${enviados} de ${total} invitaciones.`
       );
 
-    if (enviados.length === 0) {
-      throw new Error(
-        "No se pudo enviar ninguna invitación."
-      );
     }
 
+
+    console.log(
+      `💛 Invitaciones enviadas: ${enviados}/${total}`
+    );
+
+
     return {
-      enviados: enviados.length,
-      total: destinatarios.length
+
+      enviados,
+
+      total,
+
+      destinatarios
+
     };
 
-  } catch (error) {
+  }
+
+  catch (error) {
 
     console.error(
-      "❌ No se pudieron enviar las invitaciones:"
+      "❌ No se pudieron enviar todas las invitaciones:"
     );
 
     console.error(error);
 
     throw error;
+
   }
 }

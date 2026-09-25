@@ -31,11 +31,17 @@ const MI_EMAIL =
 const PAREJA_EMAIL =
   process.env.PAREJA_EMAIL?.trim();
 
+const OTRO_EMAIL =
+  process.env.OTRO_EMAIL?.trim();
+
 const ADMIN_TOKEN =
   process.env.ADMIN_TOKEN?.trim();
 
 const APP_URL =
   process.env.APP_URL?.trim();
+
+const BACKEND_URL =
+  process.env.BACKEND_URL?.trim();
 
 
 /*
@@ -43,22 +49,32 @@ const APP_URL =
  */
 
 if (!MI_EMAIL) {
-  console.error("❌ Falta MI_EMAIL en .env");
+  console.error("❌ Falta MI_EMAIL");
   process.exit(1);
 }
 
 if (!PAREJA_EMAIL) {
-  console.error("❌ Falta PAREJA_EMAIL en .env");
+  console.error("❌ Falta PAREJA_EMAIL");
+  process.exit(1);
+}
+
+if (!OTRO_EMAIL) {
+  console.error("❌ Falta OTRO_EMAIL");
   process.exit(1);
 }
 
 if (!ADMIN_TOKEN) {
-  console.error("❌ Falta ADMIN_TOKEN en .env");
+  console.error("❌ Falta ADMIN_TOKEN");
   process.exit(1);
 }
 
 if (!APP_URL) {
-  console.error("❌ Falta APP_URL en .env");
+  console.error("❌ Falta APP_URL");
+  process.exit(1);
+}
+
+if (!BACKEND_URL) {
+  console.error("❌ Falta BACKEND_URL");
   process.exit(1);
 }
 
@@ -77,7 +93,7 @@ function responder(res, codigo, datos) {
       "application/json; charset=utf-8",
 
     "Access-Control-Allow-Origin":
-      "https://aniversario-1-zupf.onrender.com",
+      APP_URL,
 
     "Access-Control-Allow-Methods":
       "GET, POST, OPTIONS",
@@ -87,7 +103,9 @@ function responder(res, codigo, datos) {
 
   });
 
-  res.end(JSON.stringify(datos));
+  res.end(
+    JSON.stringify(datos)
+  );
 
 }
 
@@ -205,7 +223,9 @@ async function leerBody(req) {
 
   }
 
-  return JSON.parse(body || "{}");
+  return JSON.parse(
+    body || "{}"
+  );
 
 }
 
@@ -384,11 +404,12 @@ const server =
         return;
       }
 
+
       /*
-      * =========================================================
-      * SERVIR OUTFITS GENERADOS
-      * =========================================================
-      */
+       * =========================================================
+       * SERVIR OUTFITS GENERADOS
+       * =========================================================
+       */
 
       if (
         req.method === "GET" &&
@@ -439,7 +460,7 @@ const server =
                 "public, max-age=86400",
 
               "Access-Control-Allow-Origin":
-                "https://aniversario-1-zupf.onrender.com"
+                APP_URL
             }
           );
 
@@ -490,11 +511,12 @@ const server =
         return;
       }
 
+
       /*
-      * =========================================================
-      * DESCARGAR OUTFIT AL DISPOSITIVO
-      * =========================================================
-      */
+       * =========================================================
+       * DESCARGAR OUTFIT
+       * =========================================================
+       */
 
       if (
         req.method === "GET" &&
@@ -508,7 +530,7 @@ const server =
           const url =
             new URL(
               req.url,
-              "http://localhost:3000"
+              BACKEND_URL
             );
 
 
@@ -532,12 +554,6 @@ const server =
             return;
           }
 
-
-          /*
-          * Importantísimo:
-          * solo aceptamos el nombre,
-          * no rutas completas.
-          */
 
           const nombreArchivo =
             path.basename(
@@ -581,10 +597,6 @@ const server =
             );
 
 
-          /*
-          * Nombre bonito para ella.
-          */
-
           const nombreDescarga =
             `Outfit-Amorcito-${Date.now()}.png`;
 
@@ -602,7 +614,7 @@ const server =
                 `attachment; filename="${nombreDescarga}"`,
 
               "Access-Control-Allow-Origin":
-                "https://aniversario-1-zupf.onrender.com"
+                APP_URL
             }
           );
 
@@ -653,162 +665,150 @@ const server =
         return;
       }
 
+
       /*
-      * =========================================================
-      * HISTORIAL DE OUTFITS
-      * =========================================================
-      */
+       * =========================================================
+       * HISTORIAL DE OUTFITS
+       * =========================================================
+       */
 
       if (
-      req.method === "GET" &&
-      req.url === "/api/outfits/historial"
+        req.method === "GET" &&
+        req.url === "/api/outfits/historial"
       ) {
 
-      try {
+        try {
 
-        const carpeta =
-          path.join(
-            process.cwd(),
-            "storage",
-            "outfits",
-            "generados"
-          );
-
-
-        /*
-          * Crear por si todavía
-          * no existe.
-          */
-
-        await fs.mkdir(
-          carpeta,
-          {
-            recursive: true
-          }
-        );
+          const carpeta =
+            path.join(
+              process.cwd(),
+              "storage",
+              "outfits",
+              "generados"
+            );
 
 
-        const archivos =
-          await fs.readdir(
+          await fs.mkdir(
             carpeta,
             {
-              withFileTypes: true
+              recursive: true
             }
           );
 
 
-        const archivosImagen =
-          archivos.filter(
-            archivo =>
-              archivo.isFile() &&
-              archivo.name
-                .toLowerCase()
-                .endsWith(".png")
-          );
-
-
-        const backendUrl =
-          process.env
-            .BACKEND_URL
-            ?.trim() ||
-          "http://localhost:3000";
-
-
-        const outfits =
-          await Promise.all(
-
-            archivosImagen.map(
-              async archivo => {
-
-                const ruta =
-                  path.join(
-                    carpeta,
-                    archivo.name
-                  );
-
-
-                const estadisticas =
-                  await fs.stat(
-                    ruta
-                  );
-
-
-                return {
-
-                  id:
-                    archivo.name,
-
-                  archivo:
-                    archivo.name,
-
-                  imagen:
-                    `${backendUrl}/media/outfits/generados/${encodeURIComponent(archivo.name)}`,
-
-                  fecha:
-                    estadisticas
-                      .mtime
-                      .toISOString(),
-
-                  timestamp:
-                    estadisticas
-                      .mtimeMs
-
-                };
-
+          const archivos =
+            await fs.readdir(
+              carpeta,
+              {
+                withFileTypes: true
               }
-            )
+            );
 
+
+          const archivosImagen =
+            archivos.filter(
+              archivo =>
+                archivo.isFile() &&
+                archivo.name
+                  .toLowerCase()
+                  .endsWith(".png")
+            );
+
+
+          const outfits =
+            await Promise.all(
+
+              archivosImagen.map(
+                async archivo => {
+
+                  const ruta =
+                    path.join(
+                      carpeta,
+                      archivo.name
+                    );
+
+
+                  const estadisticas =
+                    await fs.stat(
+                      ruta
+                    );
+
+
+                  return {
+
+                    id:
+                      archivo.name,
+
+                    archivo:
+                      archivo.name,
+
+                    imagen:
+                      `${BACKEND_URL}/media/outfits/generados/${encodeURIComponent(
+                        archivo.name
+                      )}`,
+
+                    fecha:
+                      estadisticas
+                        .mtime
+                        .toISOString(),
+
+                    timestamp:
+                      estadisticas
+                        .mtimeMs
+
+                  };
+
+                }
+              )
+
+            );
+
+
+          outfits.sort(
+            (a, b) =>
+              b.timestamp -
+              a.timestamp
           );
 
 
-        /*
-          * Más nuevos primero.
-          */
+          responder(
+            res,
+            200,
+            {
+              ok: true,
+              outfits
+            }
+          );
 
-        outfits.sort(
-          (a, b) =>
-            b.timestamp -
-            a.timestamp
-        );
+        } catch (error) {
 
-
-        responder(
-          res,
-          200,
-          {
-            ok: true,
-            outfits
-          }
-        );
-
-      } catch (error) {
-
-        console.error(
-          "❌ Error cargando historial:",
-          error
-        );
+          console.error(
+            "❌ Error cargando historial:",
+            error
+          );
 
 
-        responder(
-          res,
-          500,
-          {
-            ok: false,
-            mensaje:
-              "No se pudo cargar el historial de outfits."
-          }
-        );
+          responder(
+            res,
+            500,
+            {
+              ok: false,
+              mensaje:
+                "No se pudo cargar el historial de outfits."
+            }
+          );
 
+        }
+
+        return;
       }
 
-      return;
-      }
 
       /*
-      * ===============================================
-      * ADMIN - ENVIAR INVITACIÓN INICIAL
-      * ===============================================
-      */
+       * ===============================================
+       * ADMIN - ENVIAR INVITACIÓN INICIAL
+       * ===============================================
+       */
 
       if (
         req.method === "POST" &&
@@ -830,26 +830,35 @@ const server =
           return;
         }
 
+
         try {
 
           console.log(
             "💌 Solicitud para enviar invitación inicial"
           );
 
-          const info =
+
+          const resultado =
             await enviarInvitacion();
+
 
           responder(
             res,
             200,
             {
               ok: true,
+
               mensaje:
-                "Invitación enviada correctamente 💛",
-              destinatario:
-                PAREJA_EMAIL,
-              messageId:
-                info.messageId
+                "Invitaciones enviadas correctamente 💛",
+
+              enviados:
+                resultado.enviados,
+
+              total:
+                resultado.total,
+
+              destinatarios:
+                resultado.destinatarios
             }
           );
 
@@ -859,15 +868,22 @@ const server =
             "❌ Error enviando invitación inicial:"
           );
 
-          console.error(error);
+          console.error(
+            error
+          );
+
 
           responder(
             res,
             500,
             {
               ok: false,
+
               mensaje:
-                "No se pudo enviar la invitación."
+                "No se pudieron enviar las invitaciones.",
+
+              error:
+                error.message
             }
           );
 
@@ -875,6 +891,7 @@ const server =
 
         return;
       }
+
 
       /*
        * ===============================================
@@ -937,6 +954,7 @@ const server =
               APP_URL
             );
 
+
           if (!puzzle) {
 
             responder(
@@ -959,37 +977,33 @@ const server =
             );
 
 
-          /*
-           * LOG ANTES DE ENVIAR
-           */
-
           console.log(
             "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           );
 
+
           console.log(
             `🧩 Intentando enviar Puzzle ${numero}`
           );
+
 
           console.log(
             "📧 Destinatario:",
             PAREJA_EMAIL
           );
 
+
           console.log(
             "📌 Asunto:",
             puzzle.asunto
           );
+
 
           console.log(
             "🔗 URL:",
             puzzle.url
           );
 
-
-          /*
-           * ENVÍO
-           */
 
           const info =
             await enviarCorreo(
@@ -1003,42 +1017,39 @@ const server =
             );
 
 
-          /*
-           * LOG COMPLETO
-           */
-
           console.log(
             "✅ Nodemailer terminó el envío"
           );
+
 
           console.log(
             "🆔 Message ID:",
             info.messageId
           );
 
+
           console.log(
             "✅ Aceptados:",
             info.accepted
           );
+
 
           console.log(
             "❌ Rechazados:",
             info.rejected
           );
 
+
           console.log(
             "📨 Respuesta SMTP:",
             info.response
           );
 
+
           console.log(
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
           );
 
-
-          /*
-           * Verificar destinatario
-           */
 
           if (
             info.rejected &&
@@ -1080,7 +1091,10 @@ const server =
             "❌ Error enviando puzzle:"
           );
 
-          console.error(error);
+
+          console.error(
+            error
+          );
 
 
           responder(
@@ -1098,63 +1112,68 @@ const server =
         return;
       }
 
+
       /*
-      * ===============================================
-      * GENERAR OUTFITS
-      * ===============================================
-      */
+       * ===============================================
+       * GENERAR OUTFITS
+       * ===============================================
+       */
 
       if (
         req.method === "POST" &&
         req.url === "/api/outfits"
-       ) {
+      ) {
 
-         try {
+        try {
 
           console.log(
-           "👗 Solicitud de outfits recibida"
-         );
+            "👗 Solicitud de outfits recibida"
+          );
 
 
-              const imagenes =
-                await generarOutfitsDesdeRequest(
-                  req
-                );
+          const imagenes =
+            await generarOutfitsDesdeRequest(
+              req
+            );
 
 
-              responder(
-                res,
-                200,
-                {
-                  ok: true,
-                  imagenes
-                }
-              );
-
-            } catch (error) {
-
-              console.error(
-                "❌ Error generando outfits:"
-              );
-
-              console.error(error);
-
-
-              responder(
-                res,
-                500,
-                {
-                  ok: false,
-                  mensaje:
-                    error.message ||
-                    "No se pudieron generar los outfits."
-                }
-              );
-
+          responder(
+            res,
+            200,
+            {
+              ok: true,
+              imagenes
             }
+          );
 
-            return;
-          }
+        } catch (error) {
+
+          console.error(
+            "❌ Error generando outfits:"
+          );
+
+
+          console.error(
+            error
+          );
+
+
+          responder(
+            res,
+            500,
+            {
+              ok: false,
+
+              mensaje:
+                error.message ||
+                "No se pudieron generar los outfits."
+            }
+          );
+
+        }
+
+        return;
+      }
 
 
       /*
@@ -1330,6 +1349,7 @@ const server =
             "\n💌 Enviando correo personalizado..."
           );
 
+
           console.log(
             "📧 Destinatario:",
             PAREJA_EMAIL
@@ -1352,15 +1372,18 @@ const server =
             "✅ Correo personalizado enviado"
           );
 
+
           console.log(
             "🆔:",
             info.messageId
           );
 
+
           console.log(
             "✅ Aceptados:",
             info.accepted
           );
+
 
           console.log(
             "❌ Rechazados:",
@@ -1385,7 +1408,10 @@ const server =
             "❌ Error enviando correo personalizado:"
           );
 
-          console.error(error);
+
+          console.error(
+            error
+          );
 
 
           responder(
@@ -1827,15 +1853,18 @@ const server =
                   `✅ Correo enviado a ${destinatario}`
                 );
 
+
                 console.log(
                   "🆔",
                   resultado.value.messageId
                 );
 
+
                 console.log(
                   "✅ Aceptados:",
                   resultado.value.accepted
                 );
+
 
                 console.log(
                   "❌ Rechazados:",
@@ -1847,6 +1876,7 @@ const server =
                 console.error(
                   `❌ Error enviando a ${destinatario}:`
                 );
+
 
                 console.error(
                   resultado.reason
@@ -1873,6 +1903,7 @@ const server =
               500,
               {
                 ok: false,
+
                 mensaje:
                   "La cita fue recibida, pero uno de los correos no pudo enviarse."
               }
@@ -1887,6 +1918,7 @@ const server =
             200,
             {
               ok: true,
+
               mensaje:
                 "La cita fue registrada y los correos fueron enviados 💛"
             }
@@ -1899,7 +1931,10 @@ const server =
             "❌ Error procesando la cita:"
           );
 
-          console.error(error);
+
+          console.error(
+            error
+          );
 
 
           responder(
@@ -1907,6 +1942,7 @@ const server =
             500,
             {
               ok: false,
+
               mensaje:
                 "Ocurrió un problema al registrar la cita."
             }
@@ -1950,33 +1986,51 @@ server.listen(
   () => {
 
     console.log("");
+
     console.log(
       "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     );
+
 
     console.log(
       `💛 Servidor funcionando en puerto ${PORT}`
     );
 
+
     console.log(
       `📧 Tu correo: ${MI_EMAIL}`
     );
 
+
     console.log(
-      `💌 Correo de ella: ${PAREJA_EMAIL}`
+      `💌 Correo principal: ${PAREJA_EMAIL}`
     );
+
+
+    console.log(
+      `💌 Segundo correo: ${OTRO_EMAIL}`
+    );
+
 
     console.log(
       `🌐 Aplicación: ${APP_URL}`
     );
 
+
+    console.log(
+      `🖥️ Backend: ${BACKEND_URL}`
+    );
+
+
     console.log(
       "🔐 Admin token cargado: Sí"
     );
 
+
     console.log(
       "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     );
+
 
     console.log("");
 
