@@ -110,13 +110,13 @@ Hoy abriste seis puertas.
 
 Y detrás de cada una encontraste un pequeño pedacito de nuestra historia: un comienzo, una canción, una palabra, una fecha, un sueño y un detalle. Cosas que, por separado, quizá parezcan pequeñas… pero que juntas cuentan una historia que para mí significa muchísimo.
 
-Me gusta pensar que así es como se construye el amor: no solamente con los grandes momentos, sino también con esas pequeñas cosas que, sin darnos cuenta, terminan convirtiéndose en nuestros recuerdos favoritos.
+Me gusta pensar que así es como se construye el amor, no solamente con los grandes momentos, sino también con esas pequeñas cosas que, sin darnos cuenta, terminan convirtiéndose en nuestros recuerdos favoritos.
 
-Cada risa, cada conversación, cada abrazo, cada momento inesperado y cada instante que hemos compartido ha ido dejando una pequeña huella en mí. Y quizá eso es lo más bonito de todo: que nuestra historia no está hecha solamente de un día especial, sino de todos esos momentos que hemos ido convirtiendo en algo nuestro.
+Cada risa, cada mensaje, cada abrazo, cada momento que pasamos y cada instante que hemos compartido ha ido dejando una pequeña huella en mí. Y quizá eso es lo más bonito de todo, ¿no?, que nuestra historia no está hecha solamente de un día especial, sino de todos esos momentos que hemos ido convirtiendo en algo nuestro.
 
-Gracias por compartir conmigo tus días, por dejarme conocer tu mundo, por las risas, por los momentos difíciles, por las conversaciones que se alargan y por todas esas pequeñas cosas que quizá no siempre te digo, pero que valoro muchísimo.
+Gracias por compartir conmigo tus días, por dejarme conocer tu mundo, por las risas, por los momentos difíciles, por las conversaciones largas y por todas esas pequeñas cosas que quizá no siempre te digo, pero que valoro muchísimo.
 
-Me hace feliz mirar hacia atrás y recordar todo lo que hemos vivido, pero todavía me emociona más mirar hacia adelante e imaginar todo lo que nos falta por vivir.
+Me hace tan feliz mirar hacia atrás y recordar todo lo que hemos vivido, pero todavía me emociona más mirar hacia adelante e imaginar todo lo que nos falta por vivir.
 
 Porque hoy terminaste seis puertas… pero nuestra historia todavía tiene muchas más por abrir.
 
@@ -136,7 +136,7 @@ Y espero que este sea solamente uno de los muchos capítulos que todavía nos qu
 
 Con todo mi amor,
 
-David 💛
+David Verde💛
 `;
 
   readonly resueltas =
