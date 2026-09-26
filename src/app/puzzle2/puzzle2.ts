@@ -48,9 +48,9 @@ export class Puzzle2 {
     {
       id: 1,
       titulo: 'El comienzo',
-      pregunta: '¿Dónde fue nuestra primera cita?',
-      respuestas: ['CAMBIAR_1'],
-      pista: 'Recuerda ese lugar donde comenzó nuestra aventura.',
+      pregunta: '¿Dónde nos vimos por primera vez?',
+      respuestas: ['Capitania', 'CAPITANIA', 'capitania', 'Capitanía', 'CAPITANÍA', 'capitanía'],
+      pista: 'Recuerda ese lugar donde tuvimos nuestra primera conversación.',
       mensaje: 'Si pudiera volver al principio, volvería a elegir encontrarte.',
       color: '#005cbf'
     },
@@ -58,7 +58,7 @@ export class Puzzle2 {
       id: 2,
       titulo: 'Nuestra melodía',
       pregunta: '¿Qué canción nos recuerda a nosotros?',
-      respuestas: ['CAMBIAR_2'],
+      respuestas: ['Like Im Gonna Lose You', 'LIKE IM GONNA LOSE YOU', 'like im gonna lose you', 'Cosas que no te dije', 'COSAS QUE NO TE DIJE', 'cosas que no te dije'],
       pista: 'Esa canción que te hace pensar en mí cuando la escuchas.',
       mensaje: 'Desde que estás tú, hay canciones que tienen otro significado.',
       color: '#652f5f'
@@ -67,7 +67,7 @@ export class Puzzle2 {
       id: 3,
       titulo: 'Un nombre especial',
       pregunta: '¿Cuál es ese apodo de cariño que te digo?',
-      respuestas: ['CAMBIAR_3'],
+      respuestas: ['Pinguinita', 'PINGUINITA', 'pinguinita', 'Pingüinita', 'PINGÜINITA', 'pingüinita'],
       pista: 'No es tu nombre, pero sabes perfectamente que te hablo a ti.',
       mensaje: 'Entre tantas palabras, siempre encuentro una forma bonita de llamarte.',
       color: '#2b1b60'
@@ -76,7 +76,7 @@ export class Puzzle2 {
       id: 4,
       titulo: 'Nuestra fecha',
       pregunta: '¿Qué día comenzó nuestra historia? Escríbelo como día/mes/año.',
-      respuestas: ['CAMBIAR_4'],
+      respuestas: ['28/09/2025', '28/9/2025', '28-09-2025', '28-9-2025'],
       pista: 'Es esa fecha que convirtió un día cualquiera en uno especial.',
       mensaje: 'Hay fechas que se escriben en el calendario y otras que se quedan en el corazón.',
       color: '#23646a'
@@ -85,7 +85,7 @@ export class Puzzle2 {
       id: 5,
       titulo: 'Un lugar pendiente',
       pregunta: '¿A qué lugar queremos ir juntos?',
-      respuestas: ['CAMBIAR_5'],
+      respuestas: ['Guanajuato', 'GUANAJUATO', 'guanajuato', 'Camping', 'CAMPING', 'camping', 'Playa', 'PLAYA', 'playa'],
       pista: 'Piensa en ese plan del que hemos hablado.',
       mensaje: 'Todavía nos esperan muchos lugares, pero mi parte favorita será ir contigo.',
       color: '#854c25'
@@ -94,7 +94,7 @@ export class Puzzle2 {
       id: 6,
       titulo: 'El primer detalle',
       pregunta: '¿Cuál fue el primer regalo que te di?',
-      respuestas: ['CAMBIAR_6'],
+      respuestas: ['Una rosa', 'UNA ROSA', 'una rosa', 'Rosa', 'ROSA', 'rosa', 'Flores', 'FLORES', 'flores', 'Un ramo de flores', 'UN RAMO DE FLORES', 'un ramo de flores', 'Flor', 'FLOR', 'flor'],
       pista: 'Recuerda ese primer detalle y lo que sentiste al recibirlo.',
       mensaje: 'Lo más bonito de darte algo siempre será verte sonreír.',
       color: '#536229'

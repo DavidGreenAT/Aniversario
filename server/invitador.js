@@ -1,9 +1,17 @@
+import "dotenv/config";
+
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { enviarCorreo } from "./mail.js";
 
+
 export async function enviarInvitacion() {
+
   try {
 
     console.log("💌 Enviando invitaciones...");
+
 
     /*
      * =========================================================
@@ -12,8 +20,11 @@ export async function enviarInvitacion() {
      */
 
     const destinatarios = [
+
       process.env.PAREJA_EMAIL?.trim(),
+
       process.env.OTRO_EMAIL?.trim()
+
     ].filter(Boolean);
 
 
@@ -22,10 +33,12 @@ export async function enviarInvitacion() {
      * los dos correos configurados.
      */
 
-    if (destinatarios.length !== 2) {
+    if (
+      destinatarios.length !== 2
+    ) {
 
       throw new Error(
-        `Se esperaban 2 destinatarios, pero se encontraron ${destinatarios.length}. Revisa PAREJA_EMAIL y OTRO_EMAIL en Render.`
+        `Se esperaban 2 destinatarios, pero se encontraron ${destinatarios.length}. Revisa PAREJA_EMAIL y OTRO_EMAIL en tu .env`
       );
 
     }
@@ -249,6 +262,12 @@ export async function enviarInvitacion() {
     );
 
 
+    console.log(
+      "🌐 Link:",
+      `${appUrl}/login`
+    );
+
+
     /*
      * =========================================================
      * ENVIAR A LOS DOS
@@ -262,6 +281,11 @@ export async function enviarInvitacion() {
 
           async correo => {
 
+            console.log(
+              `📤 Intentando enviar a ${correo}...`
+            );
+
+
             const info =
               await enviarCorreo(
                 correo,
@@ -271,8 +295,8 @@ export async function enviarInvitacion() {
 
 
             /*
-             * Nodemailer puede resolver la promesa
-             * pero Gmail puede rechazar un destinatario.
+             * Nodemailer puede terminar correctamente
+             * pero Gmail puede rechazar el destinatario.
              */
 
             if (
@@ -330,12 +354,13 @@ export async function enviarInvitacion() {
           "fulfilled"
         ) {
 
+          console.log("");
           console.log(
             `✅ Invitación enviada a ${correo}`
           );
 
           console.log(
-            "🆔",
+            "🆔 Message ID:",
             resultado.value.messageId
           );
 
@@ -349,9 +374,16 @@ export async function enviarInvitacion() {
             resultado.value.rejected
           );
 
+          console.log(
+            "📨 Respuesta:",
+            resultado.value.response
+          );
+
         }
 
         else {
+
+          console.log("");
 
           console.error(
             `❌ Error enviando a ${correo}`
@@ -367,6 +399,12 @@ export async function enviarInvitacion() {
     );
 
 
+    /*
+     * =========================================================
+     * CONTAR RESULTADOS
+     * =========================================================
+     */
+
     const enviados =
       resultados.filter(
         resultado =>
@@ -379,11 +417,14 @@ export async function enviarInvitacion() {
 
 
     /*
-     * Si uno de los dos falló,
-     * informamos que el proceso no fue completo.
+     * =========================================================
+     * VALIDAR QUE LOS DOS SE ENVIARON
+     * =========================================================
      */
 
-    if (enviados !== total) {
+    if (
+      enviados !== total
+    ) {
 
       throw new Error(
         `Solo se enviaron ${enviados} de ${total} invitaciones.`
@@ -392,6 +433,7 @@ export async function enviarInvitacion() {
     }
 
 
+    console.log("");
     console.log(
       `💛 Invitaciones enviadas: ${enviados}/${total}`
     );
@@ -411,6 +453,7 @@ export async function enviarInvitacion() {
 
   catch (error) {
 
+    console.error("");
     console.error(
       "❌ No se pudieron enviar todas las invitaciones:"
     );
@@ -420,4 +463,131 @@ export async function enviarInvitacion() {
     throw error;
 
   }
+
+}
+
+
+/*
+ * =========================================================
+ * EJECUCIÓN MANUAL DESDE TERMINAL
+ * =========================================================
+ *
+ * Esto permite ejecutar:
+ *
+ * node server/invitador.js
+ *
+ * Pero NO enviará automáticamente el correo cuando
+ * servidor.js importe enviarInvitacion().
+ *
+ * =========================================================
+ */
+
+
+const archivoActual =
+  path.resolve(
+    fileURLToPath(
+      import.meta.url
+    )
+  );
+
+
+const archivoEjecutado =
+  process.argv[1]
+    ? path.resolve(
+        process.argv[1]
+      )
+    : null;
+
+
+if (
+  archivoEjecutado &&
+  archivoActual === archivoEjecutado
+) {
+
+  console.log("");
+  console.log(
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  );
+
+  console.log(
+    "🚀 Ejecutando invitador manualmente"
+  );
+
+  console.log(
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  );
+
+  console.log("");
+
+
+  enviarInvitacion()
+
+    .then(
+      resultado => {
+
+        console.log("");
+        console.log(
+          "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        );
+
+        console.log(
+          "💛 PROCESO TERMINADO"
+        );
+
+        console.log(
+          `📧 Enviados: ${resultado.enviados}/${resultado.total}`
+        );
+
+        console.log(
+          "👥 Destinatarios:"
+        );
+
+
+        resultado.destinatarios.forEach(
+          correo => {
+
+            console.log(
+              `   ✅ ${correo}`
+            );
+
+          }
+        );
+
+
+        console.log(
+          "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        );
+
+        console.log("");
+
+      }
+    )
+
+    .catch(
+      error => {
+
+        console.log("");
+        console.log(
+          "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        );
+
+        console.error(
+          "❌ EL ENVÍO NO SE COMPLETÓ"
+        );
+
+        console.error(
+          error.message
+        );
+
+        console.log(
+          "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        );
+
+        console.log("");
+
+        process.exitCode = 1;
+
+      }
+    );
+
 }
