@@ -6,6 +6,7 @@ import { Puzzle1 } from './puzzle1/puzzle1';
 import { AmorcitoService } from './services/amorcito-service';
 import { Amorcito } from './amorcito/amorcito';
 import { Puzzle2 } from './puzzle2/puzzle2';
+import { Puzzle3 } from './puzzle3/puzzle3';
 
 export const routes: Routes = [
   {
@@ -35,5 +36,9 @@ export const routes: Routes = [
   {
     path: 'puzzle/2',
     component: Puzzle2
+  },
+  {
+    path: 'puzzle/3',
+    component: Puzzle3
   }
 ];
