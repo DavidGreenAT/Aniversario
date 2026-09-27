@@ -1,1 +1,154 @@
-<p>puzzle3 works!</p>
+<main class="aventura">
+  <header class="cabecera">
+    <a routerLink="/amorcito" class="volver">← Nuestro mundo</a>
+    <span class="marca">DAVID & ARIANA <i>·</i> PUZZLE 03</span>
+    <span class="contador" aria-live="polite">{{ recogidos().length }} / 3 ojos</span>
+  </header>
+
+  <section class="presentacion">
+    <span class="eyebrow">UN PEQUEÑO MUNDO PARA NOSOTROS</span>
+    <h1>Tres maravillas.<br><em>Una historia por encontrar.</em></h1>
+    <p>Camina con Coraline, encuentra los tres ojos de luz<br class="solo-desktop"> y deja un pedacito de tu corazón en cada lugar.</p>
+  </section>
+
+  <ol class="ruta" aria-label="Lugares de la aventura">
+    @for (lugar of lugares; track lugar.id; let i = $index) {
+      <li [class.actual]="indice() === i" [class.hecho]="recogidos().includes(lugar.id)"
+          [attr.aria-current]="indice() === i ? 'step' : null">
+        <span class="orbita">{{ recogidos().includes(lugar.id) ? '✓' : '0' + (i + 1) }}</span>
+        <div><small>MARAVILLA 0{{ i + 1 }}</small><strong>{{ lugar.id === 'parque' ? 'El parque' : lugar.id === 'mirador' ? 'El mirador' : 'La librería' }}</strong></div>
+      </li>
+    }
+  </ol>
+
+  <section class="juego" aria-label="Aventura 3D">
+    <div #escenario class="escenario" (pointerdown)="enfocarJuego()" [class.oculto]="sin3d()"></div>
+
+    @if (sin3d()) {
+      <div class="lectura">
+        <span class="eyebrow">MODO LECTURA</span>
+        <span class="ilustracion" aria-hidden="true">{{ indice() === 0 ? '☾' : indice() === 1 ? '✧' : '❧' }}</span>
+        <h2>{{ actual().nombre }}</h2><p>{{ actual().subtitulo }}</p>
+      </div>
+    }
+
+    @if (cargando3d()) {
+      <div class="cortina"><div class="panel-inicio"><span class="eyebrow">ABRIENDO LA PUERTA</span><h2>Preparando tus maravillas…</h2></div></div>
+    } @else if (error3d() && !sin3d()) {
+      <div class="cortina"><div class="panel-inicio"><h2>La historia puede continuar.</h2><p>{{ error3d() }}</p>
+        <button class="dorado" type="button" (click)="continuarSin3d()">Continuar en modo lectura</button>
+      </div></div>
+    } @else if (!iniciado() && !finalizado()) {
+      <div class="cortina"><div class="panel-inicio">
+        <span class="eyebrow">PARA TI, ARIANA</span><h2>Hay tres luces<br>esperándote.</h2>
+        <p>Explora cada lugar y acércate a su esfera. No hay enemigos ni límite de tiempo.</p>
+        <p class="nota">Al completar la aventura, tus tres respuestas se enviarán a David por correo 💛</p>
+        <button class="dorado" type="button" (click)="comenzar()">Entrar a nuestro mundo →</button>
+        <small>Teclado: W A S D / flechas · Celular: controles en pantalla</small>
+      </div></div>
+    }
+
+    @if (iniciado() && !finalizado() && (!error3d() || sin3d())) {
+      <div class="hud">
+        <span class="eyebrow">MARAVILLA 0{{ indice() + 1 }}</span>
+        <h2>{{ actual().nombre }}</h2>
+        <p>{{ actual().subtitulo }}</p>
+      </div>
+      <button class="ayuda" type="button" (click)="pistaVisible.set(!pistaVisible())" [attr.aria-expanded]="pistaVisible()" aria-controls="pista-juego">¿Dónde busco?</button>
+      @if (pistaVisible()) { <p class="pista" id="pista-juego">{{ actual().pista }}</p> }
+
+      @if (actualRecogido()) {
+        <div class="hallazgo" role="status">
+          <span class="eyebrow">UN RECUERDO MÁS ES TUYO</span><h3>Encontraste este ojo de luz.</h3>
+          <button class="dorado" type="button" (click)="siguienteLugar()">Viajar a {{ indice() === 0 ? 'el mirador' : 'la librería' }} →</button>
+        </div>
+      } @else {
+        @if (!sin3d()) {
+          <div class="controles" aria-label="Controles de movimiento">
+            <button type="button" class="arriba" aria-label="Caminar hacia adelante"
+              (pointerdown)="mover($event,0,-1)" (pointerup)="detener()" (pointercancel)="detener()" (lostpointercapture)="detener()">↑</button>
+            <button type="button" class="izquierda" aria-label="Caminar hacia la izquierda"
+              (pointerdown)="mover($event,-1,0)" (pointerup)="detener()" (pointercancel)="detener()" (lostpointercapture)="detener()">←</button>
+            <button type="button" class="abajo" aria-label="Caminar hacia atrás"
+              (pointerdown)="mover($event,0,1)" (pointerup)="detener()" (pointercancel)="detener()" (lostpointercapture)="detener()">↓</button>
+            <button type="button" class="derecha" aria-label="Caminar hacia la derecha"
+              (pointerdown)="mover($event,1,0)" (pointerup)="detener()" (pointercancel)="detener()" (lostpointercapture)="detener()">→</button>
+          </div>
+        }
+        <div class="interaccion">
+          <button type="button" class="dorado" [disabled]="!cerca() && !sin3d()" (click)="abrirReto()">
+            {{ cerca() || sin3d() ? 'Recoger ojo de luz ✧' : 'Acércate a la esfera' }}
+          </button>
+          <small>{{ sin3d() ? 'Responde para encontrar tu recuerdo' : 'Junto a la esfera también puedes pulsar E' }}</small>
+        </div>
+      }
+    }
+
+    @if (finalizado()) {
+      <div class="cortina final-juego"><div class="panel-inicio">
+        <span class="tres-luces" aria-hidden="true">● &nbsp; ● &nbsp; ●</span>
+        <span class="eyebrow">LAS TRES MARAVILLAS COMPLETAS</span>
+        <h2>Volviste con<br>un mundo dentro.</h2>
+        <p>Tu carta te espera justo debajo.</p>
+        <a class="dorado" href="#carta-puzzle3">Descubrir mi carta ↓</a>
+      </div></div>
+    }
+  </section>
+
+  <p class="pie-juego">Toca el escenario para usar el teclado. Camina sin prisa; aquí no se pierde por intentarlo.</p>
+  @if (!invitacionValida() && !cargando3d()) {
+    <p class="aviso" role="status">Para validar el libro y enviar las respuestas, entra desde el enlace del correo “Puzzle 3”.</p>
+  }
+  <p class="aviso" role="status">{{ avisoLocal() }}</p>
+
+  @if (finalizado()) {
+    <section class="recompensa" id="carta-puzzle3">
+      <span class="eyebrow">LO QUE NOS LLEVAMOS DEL VIAJE</span><h2>Una carta para ti.</h2>
+      @if (!cartaAbierta()) {
+        <button type="button" class="sobre" (click)="cartaAbierta.set(true)"><span aria-hidden="true">♡</span><strong>Ariana</strong><small>Toca para abrir tu carta</small></button>
+      } @else {
+        <article class="carta"><span class="eyebrow">CARTA 03</span><h3>{{ tituloCarta }}</h3><p>{{ textoCarta }}</p></article>
+        <div class="acciones">
+          <button type="button" class="dorado" (click)="guardarCarta()" [disabled]="cartaGuardada()">{{ cartaGuardada() ? 'Carta guardada ✓' : 'Guardar mi carta ♡' }}</button>
+          <a routerLink="/amorcito" class="fantasma">Volver a nuestro mundo</a>
+        </div>
+        <p class="aviso" role="status">{{ errorCarta() }}</p>
+      }
+      <div class="estado-envio" aria-live="polite">
+        @if (correo() === 'enviado') {
+          <strong>David recibirá tus palabras 💛</strong><p>Tus respuestas están guardadas y Gmail aceptó el correo.</p>
+        } @else if (correo() === 'sin_confirmar') {
+          <strong>Tus respuestas están guardadas.</strong><p>No pudimos confirmar el correo. David puede revisarlas en el servidor.</p>
+        } @else if (comprobandoEnvio()) {
+          <strong>{{ guardadoServidor() ? 'Tus palabras están guardadas. Preparando el correo…' : 'Enviando tus tres respuestas a David…' }}</strong>
+          <p>Puedes abrir tu carta mientras terminamos.</p>
+        } @else {
+          <strong>{{ guardadoServidor() ? 'Tus respuestas están guardadas; falta confirmar el correo.' : 'Falta confirmar el envío de tus respuestas.' }}</strong>
+          <p>Tu carta sigue disponible. Puedes volver a intentarlo.</p>
+          <button type="button" class="fantasma" (click)="enviarRespuestas()">{{ guardadoServidor() ? 'Consultar envío' : 'Reintentar envío' }}</button>
+        }
+        <p class="error" role="status">{{ errorEnvio() }}</p>
+      </div>
+    </section>
+  }
+  <footer>Hay mundos que se descubren. Y otros que construimos juntos. ♡</footer>
+</main>
+
+<dialog #dialogo class="dialogo" (cancel)="cerrarReto($event)" aria-labelledby="titulo-reto" aria-describedby="detalle-reto">
+  <div class="dialogo-interior">
+    <button type="button" class="cerrar" aria-label="Cerrar y seguir explorando" (click)="cerrarReto()" [disabled]="validando()">×</button>
+    <span class="eyebrow">OJO DE LUZ 0{{ indice() + 1 }}</span>
+    <h2 id="titulo-reto">{{ actual().nombre }}</h2>
+    <p id="detalle-reto">{{ indice() < 2 ? 'Aquí no hay respuestas correctas. Solo quiero conocer lo que sientes.' : 'Escribe el título; no importa si usas mayúsculas o acentos.' }}</p>
+    <form (ngSubmit)="confirmarRespuesta()">
+      <label for="respuesta-reto">{{ actual().pregunta }}</label>
+      <textarea id="respuesta-reto" name="respuesta" [rows]="indice() === 2 ? 2 : 5"
+        [maxlength]="indice() === 2 ? 200 : 2000" [ngModel]="borrador()" (ngModelChange)="editar($event)"
+        [disabled]="validando()" autofocus placeholder="Escribe aquí…" aria-describedby="error-reto"></textarea>
+      <div class="contador-texto">{{ borrador().length }} / {{ indice() === 2 ? 200 : 2000 }}</div>
+      <p class="nota">Al completar los tres lugares, tus respuestas se enviarán a David.</p>
+      <p class="error" id="error-reto" role="status">{{ errorRespuesta() }}</p>
+      <button type="submit" class="dorado ancho" [disabled]="validando()">{{ validando() ? 'Comprobando el recuerdo…' : 'Guardar mi respuesta y recoger el ojo ✧' }}</button>
+    </form>
+  </div>
+</dialog>
