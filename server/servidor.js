@@ -16,6 +16,7 @@ import {
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import { crearRutasPuzzle3 } from "./puzzle3.js";
 
 /*
  * =========================================================
@@ -376,6 +377,12 @@ function validarDatosCita(datos) {
 
 }
 
+const manejarPuzzle3 = crearRutasPuzzle3({
+  enviarCorreo,
+  destinatario: MI_EMAIL,
+  secreto: ADMIN_TOKEN,
+  libros: process.env.PUZZLE3_LIBROS
+});
 
 /*
  * =========================================================
@@ -404,6 +411,9 @@ const server =
         return;
       }
 
+      if (await manejarPuzzle3(req, res, responder)) {
+        return;
+      }
 
       /*
        * =========================================================

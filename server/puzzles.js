@@ -1,3 +1,6 @@
+import "dotenv/config";
+import { crearClavePuzzle3 } from "./puzzle3.js";
+
 export function obtenerPuzzle(numero, appUrl) {
 
   if (!appUrl) {
@@ -87,7 +90,18 @@ export function obtenerPuzzle(numero, appUrl) {
 
   };
 
-  return puzzles[numero] || null;
+  const puzzle = puzzles[numero];
+
+  if (!puzzle) {
+    return null;
+  }
+
+  if (Number(numero) === 3) {
+    puzzle.url =
+      `${urlBase}/puzzle/3?clave=${crearClavePuzzle3()}`;
+  }
+
+  return puzzle;
 }
 
 
