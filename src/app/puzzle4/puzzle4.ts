@@ -68,7 +68,7 @@ export class Puzzle4 {
   private readonly destroyRef = inject(DestroyRef);
 
   // MISMA URL del backend que utilizas en Admin.
-  private readonly api = 'https://TU-BACKEND.onrender.com';
+  private readonly api = 'https://aniversario-mb40.onrender.com';
 
   private readonly storageKey = 'amorcito_puzzle4_v1';
 
@@ -150,32 +150,41 @@ export class Puzzle4 {
 
   readonly tituloCarta = 'Mi próximo capítulo, contigo';
 
-  readonly textoCarta = `Mi Ariana:
+  readonly textoCarta = `Mi persona favorita 💛:
 
 Feliz aniversario, amorcito.
 
-Preparé esta aventura para regalarte un poquito de lo que siento por ti. En cada puerta, en cada lugar y en cada palabra había una manera de decirte cuánto significa para mí que estés en mi vida.
+Preparé esta aventura porque quería regalarte un poquito de todo lo que siento por ti. En cada puerta, en cada lugar y en cada palabra intenté dejarte una pequeña parte de lo que significas para mí.
 
-Recordamos nuestro comienzo, recorrimos algunos sueños y llegamos hasta aquí. Y ahora que termina el juego, quiero decirte algo sin pistas ni acertijos:
+Recordamos cómo empezó todo, recorrimos algunos de los sueños que tienes y, de alguna manera, terminamos llegando hasta aquí. Y ahora que se acaba el juego, quiero decirte algo sin pistas, sin acertijos y sin darle más vueltas:
 
 Quiero compartir mi vida contigo.
 
-Quiero conocerte también en las versiones de ti que todavía no existen. Escuchar los sueños que vayas descubriendo, acompañarte cuando algo te cueste y celebrar contigo esas pequeñas alegrías que a veces solo entiende quien te conoce de cerca.
+Quiero seguir conociéndote, incluso esas versiones de ti que todavía no conocemos. Quiero escuchar los sueños que vayas descubriendo, estar a tu lado cuando las cosas se pongan difíciles y celebrar contigo esas pequeñas cosas que quizá para los demás no significan mucho, pero que para nosotros pueden significarlo todo.
 
-Me ilusiona pensar en una vida con nuestros detalles: preparar algo de comer, prestarnos un libro, salir a caminar, contarnos cómo nos fue y encontrar tiempo para nosotros aun en los días ocupados.
+Me gusta imaginar una vida contigo en las cosas más sencillas, preparar algo de comer juntos, prestarnos libros, salir a caminar sin tener un plan, contarnos cómo nos fue durante el día, reírnos por cualquier tontería y encontrar siempre un ratito para nosotros, incluso cuando la vida se ponga ocupada.
 
-Sé que habrá cosas que tendremos que aprender. No puedo prometerte que siempre sabré qué decir o que nunca voy a equivocarme. Mi promesa es escucharte, hablarte con honestidad, reconocer mis errores y poner de mi parte para cuidar lo que estamos construyendo.
+Sé que no todo va a ser perfecto. Habrá cosas que tendremos que aprender juntos, días difíciles y momentos en los que alguno de los dos se equivoque. Yo tampoco puedo prometerte que siempre voy a saber qué decir o que nunca voy a fallar.
 
-Ese es el futuro que me gustaría construir contigo, paso a paso, con los sueños y las decisiones de los dos.
+Pero sí puedo prometerte que voy a escucharte, hablarte siempre con sinceridad, reconocer cuando me equivoque y hacer todo lo que esté en mis manos para cuidar lo que estamos construyendo.
 
-Gracias por todo lo que hemos vivido y por dejarme compartir contigo este aniversario. Cuando pienso en los capítulos que vienen, me hace feliz imaginarte en ellos.
+Porque eso es lo que quiero contigo: no una historia perfecta, sino una historia nuestra. Una que vayamos escribiendo poco a poco, con nuestros sueños, nuestras decisiones, nuestras risas, nuestros errores y todos esos pequeños momentos que terminan convirtiéndose en los más importantes.
 
-La aventura termina aquí. Mis ganas de vivir cosas contigo siguen.
+Gracias por todo lo que hemos vivido hasta ahora. Gracias por dejarme compartir contigo este aniversario y, sobre todo, gracias por dejarme ser parte de tu vida.
 
-Te amo, Ariana. Feliz aniversario. 💛
+Cuando pienso en todo lo que todavía nos queda por vivir, me hace mucha ilusión imaginarte a mi lado.
+
+La aventura termina aquí.
+
+Pero mis ganas de seguir viviendo aventuras contigo apenas comienzan.
+
+Te amo, Ariana.
+
+Feliz aniversario amorcito. 💛
 
 Con amor,
-David`;
+DavidGreen
+`;
 
   constructor() {
     afterNextRender(() => {
