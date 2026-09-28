@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { crearClavePuzzle3 } from "./puzzle3.js";
+import { crearClavePuzzle4 } from "./puzzle4.js";
 
 export function obtenerPuzzle(numero, appUrl) {
 
@@ -69,21 +70,22 @@ export function obtenerPuzzle(numero, appUrl) {
 
 
     4: {
-      asunto: "La última pista antes de nuestro día 💛",
-      titulo: "Puzzle #4",
-      emoji: "💛",
+      asunto: "Feliz aniversario, amorcito 💛",
+      titulo: "Nuestra última puerta",
+      emoji: "🗝️",
 
       mensaje: `
-        Llegaste hasta aquí.
+        Hoy es nuestro aniversario.
 
-        Esta es la última prueba antes de que llegue nuestro día.
+        Recorriste nuestros recuerdos y encontraste
+        pequeñas partes de nuestra historia.
 
-        Después de resolverla, solamente tendrás que esperar...
+        Ahora queda una última puerta.
 
-        Lo demás será una sorpresa. ♡
+        Detrás hay unas palabras que quiero compartir contigo.
       `,
 
-      boton: "Resolver el último puzzle",
+      boton: "Abrir nuestro próximo capítulo",
 
       url: `${urlBase}/puzzle/4`
     }
@@ -99,6 +101,11 @@ export function obtenerPuzzle(numero, appUrl) {
   if (Number(numero) === 3) {
     puzzle.url =
       `${urlBase}/puzzle/3?clave=${crearClavePuzzle3()}`;
+  }
+
+  if (Number(numero) === 4) {
+    puzzle.url =
+      `${urlBase}/puzzle/4?clave=${crearClavePuzzle4()}`;
   }
 
   return puzzle;

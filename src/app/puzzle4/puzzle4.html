@@ -1,0 +1,320 @@
+<main class="final-aventura">
+  <header class="cabecera">
+    <a routerLink="/amorcito">← Nuestro mundo</a>
+    <span>DAVID & ARIANA · PUZZLE 04</span>
+    <span aria-live="polite">
+      {{ recogidos().length }} / 3 fragmentos
+    </span>
+  </header>
+
+  <section class="introduccion">
+    <p class="etiqueta">EL ÚLTIMO PUZZLE · NUESTRO ANIVERSARIO</p>
+
+    <h1>
+      La puerta hacia<br>
+      <em>nuestra vida.</em>
+    </h1>
+
+    <p class="descripcion">
+      Llegaste al final de esta aventura.
+      Hoy es nuestro aniversario, pero todavía queda
+      una puerta por abrir.
+    </p>
+
+    <p class="descripcion">
+      Detrás no hay otro acertijo:
+      hay algo que quiero decirte.
+    </p>
+  </section>
+
+  @if (!puertaAbierta()) {
+    <section class="habitacion" aria-label="La última habitación">
+      <div class="puerta-escena" aria-hidden="true">
+        <span class="estrella estrella-uno">✧</span>
+        <span class="estrella estrella-dos">✦</span>
+        <span class="estrella estrella-tres">✧</span>
+
+        <div class="marco-puerta">
+          <div class="puerta">
+            <span class="numero-puerta">04</span>
+            <span class="cerradura">♡</span>
+            <span class="manija"></span>
+          </div>
+        </div>
+
+        <div class="luz-suelo"></div>
+      </div>
+
+      <div class="instrucciones">
+        <p class="etiqueta">TRES OBJETOS · UNA LLAVE</p>
+        <h2>Lo vivido. Lo soñado. Lo que cuidamos.</h2>
+        <p>
+          Explora los tres objetos y deja unas palabras en cada uno.
+          Cada respuesta te dará un fragmento de la llave.
+        </p>
+      </div>
+
+      <div class="objetos">
+        @for (fragmento of fragmentos; track fragmento.id) {
+          <button
+            type="button"
+            class="objeto"
+            [class.recogido]="recogidos().includes(fragmento.id)"
+            [disabled]="recogidos().includes(fragmento.id)"
+            (click)="abrirFragmento(fragmento)"
+          >
+            <div class="imagen-objeto">
+              @if (fragmento.imagen) {
+                <img
+                  [src]="fragmento.imagen"
+                  [alt]="fragmento.objeto"
+                >
+              } @else {
+                <span aria-hidden="true">
+                  {{ fragmento.simbolo }}
+                </span>
+              }
+
+              @if (recogidos().includes(fragmento.id)) {
+                <span class="insignia">✓</span>
+              }
+            </div>
+
+            <div class="objeto-texto">
+              <small>{{ fragmento.objeto }}</small>
+              <h3>{{ fragmento.titulo }}</h3>
+              <p>{{ fragmento.mensaje }}</p>
+
+              <strong>
+                {{
+                  recogidos().includes(fragmento.id)
+                    ? 'Fragmento encontrado ✓'
+                    : 'Explorar este recuerdo →'
+                }}
+              </strong>
+            </div>
+          </button>
+        }
+      </div>
+
+      <div class="llave-panel" aria-live="polite">
+        <div class="fragmentos-luz" aria-hidden="true">
+          @for (fragmento of fragmentos; track fragmento.id) {
+            <span [class.encendido]="recogidos().includes(fragmento.id)">
+              ◆
+            </span>
+          }
+        </div>
+
+        @if (llaveCompleta()) {
+          <span class="llave-completa" aria-hidden="true">🗝️</span>
+          <h2>La llave está completa.</h2>
+          <p>Lo que viene, me gustaría construirlo contigo.</p>
+
+          <button
+            type="button"
+            class="boton-dorado"
+            (click)="abrirPuerta()"
+          >
+            Abrir nuestro próximo capítulo →
+          </button>
+        } @else {
+          <h2>Una llave hecha de nosotros.</h2>
+          <p>Encuentra los tres fragmentos para abrir la puerta.</p>
+        }
+      </div>
+    </section>
+  } @else {
+    <section class="nuestro-futuro">
+      <div class="escena-futuro">
+        @if (imagenFinal) {
+          <img
+            class="imagen-final"
+            [src]="imagenFinal"
+            alt="El hogar que soñamos compartir"
+          >
+        } @else {
+          <div class="amanecer" aria-hidden="true">
+            <div class="sol"></div>
+            <div class="casa">
+              <div class="techo"></div>
+              <div class="pared">
+                <span class="ventana"></span>
+                <span class="entrada"></span>
+                <span class="ventana"></span>
+              </div>
+            </div>
+            <div class="tazas">☕ ☕</div>
+          </div>
+        }
+      </div>
+
+      <p class="etiqueta">FELIZ ANIVERSARIO, AMORCITO</p>
+
+      <h2>
+        Mi lugar favorito todavía<br>
+        no tiene una dirección.
+      </h2>
+
+      <p class="frase-final">Tiene que ver contigo.</p>
+
+      <button
+        type="button"
+        class="boton-dorado"
+        (click)="abrirCarta()"
+      >
+        Leer nuestra última carta ♡
+      </button>
+
+      <div class="estado-correo" aria-live="polite">
+        @if (correo() === 'enviado') {
+          <p>David recibirá tus palabras 💛</p>
+        } @else if (correo() === 'sin_confirmar') {
+          <p>
+            Tus respuestas están guardadas en el servidor.
+            No pudimos confirmar el correo.
+          </p>
+        } @else if (comprobando()) {
+          <p>Enviando tus tres respuestas a David…</p>
+        } @else {
+          <p>
+            {{
+              guardadoServidor()
+                ? 'Tus respuestas están guardadas; falta confirmar el correo.'
+                : 'Todavía no se ha confirmado el envío de tus respuestas.'
+            }}
+          </p>
+
+          <button
+            type="button"
+            class="boton-suave"
+            (click)="enviarRespuestas()"
+          >
+            {{
+              guardadoServidor()
+                ? 'Consultar envío'
+                : 'Reintentar envío'
+            }}
+          </button>
+        }
+
+        <p class="error">{{ errorEnvio() }}</p>
+      </div>
+    </section>
+  }
+
+  <p class="aviso" role="status">{{ aviso() }}</p>
+
+  <footer>
+    La aventura termina aquí.<br>
+    Mis ganas de vivir cosas contigo siguen. ♡
+  </footer>
+</main>
+
+<dialog
+  #reto
+  class="modal modal-reto"
+  aria-labelledby="titulo-fragmento"
+  (cancel)="cerrarReto($event)"
+>
+  <div class="modal-interior">
+    <button
+      type="button"
+      class="cerrar"
+      aria-label="Cerrar pregunta"
+      (click)="cerrarReto()"
+    >
+      ×
+    </button>
+
+    <p class="etiqueta">{{ activo()?.objeto }}</p>
+    <h2 id="titulo-fragmento">{{ activo()?.titulo }}</h2>
+
+    <p class="detalle">
+      Aquí no hay respuestas correctas.
+      Solo quiero conocer lo que sientes.
+    </p>
+
+    <form (ngSubmit)="guardarRespuesta()">
+      <label for="respuesta-final">
+        {{ activo()?.pregunta }}
+      </label>
+
+      <textarea
+        id="respuesta-final"
+        name="respuesta"
+        rows="6"
+        maxlength="2000"
+        [ngModel]="borrador()"
+        (ngModelChange)="editar($event)"
+        placeholder="Escribe aquí, amorcito…"
+        aria-describedby="error-respuesta"
+        autofocus
+      ></textarea>
+
+      <small class="contador-texto">
+        {{ borrador().length }} / 2000
+      </small>
+
+      <p class="nota">
+        Al abrir la puerta final, tus tres respuestas
+        se enviarán a David por correo.
+      </p>
+
+      <p id="error-respuesta" class="error" role="status">
+        {{ errorRespuesta() }}
+      </p>
+
+      <button type="submit" class="boton-dorado ancho">
+        Guardar mis palabras y recoger el fragmento ✧
+      </button>
+    </form>
+  </div>
+</dialog>
+
+<dialog
+  #carta
+  class="modal modal-carta"
+  aria-labelledby="titulo-carta"
+  (cancel)="cerrarCarta($event)"
+>
+  <div class="modal-interior">
+    <button
+      type="button"
+      class="cerrar"
+      aria-label="Cerrar carta"
+      autofocus
+      (click)="cerrarCarta()"
+    >
+      ×
+    </button>
+
+    <p class="etiqueta">LA ÚLTIMA CARTA DE ESTA AVENTURA</p>
+    <div class="corazon" aria-hidden="true">♡</div>
+
+    <h2 id="titulo-carta">{{ tituloCarta }}</h2>
+
+    <p class="texto-carta">{{ textoCarta }}</p>
+
+    <div class="acciones-carta">
+      <button
+        type="button"
+        class="boton-dorado"
+        [disabled]="cartaGuardada()"
+        (click)="guardarCarta()"
+      >
+        {{
+          cartaGuardada()
+            ? 'Nuestra carta está guardada ✓'
+            : 'Guardar nuestra última carta 💌'
+        }}
+      </button>
+
+      <a routerLink="/amorcito" class="boton-suave">
+        Volver a nuestros recuerdos
+      </a>
+    </div>
+
+    <p class="error" role="status">{{ errorCarta() }}</p>
+  </div>
+</dialog>

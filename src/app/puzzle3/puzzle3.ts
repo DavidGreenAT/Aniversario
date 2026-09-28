@@ -73,20 +73,30 @@ export class Puzzle3 {
   readonly errorCarta = signal('');
   readonly invitacionValida = signal(false);
   readonly tituloCarta = 'Tres maravillas. Un hogar contigo.';
-  readonly textoCarta = `Mi Ariana:
+  readonly textoCarta = `Mi pequeña pingüinita 💛:
 
-Buscaste tres pequeños ojos, pero en cada lugar encontraste algo mucho más grande: una parte de nosotros.
+Buscaste tres pequeños ojos y, sin darte cuenta, en cada uno encontraste un pedacito de nosotros.
 
-En el parque quedó lo que sentiste al comenzar. En el mirador, todo lo que imaginas para nuestro futuro. Y entre los libros, ese recuerdo que ya forma parte de nuestra historia.
+En el parque quedó ese sentimiento bonito de cuando todo empezó. En el mirador, esos sueños y planes que poco a poco vamos imaginando juntos. Y entre los libros, un recuerdo que quizá parecía pequeño, pero que para mí ya es parte de nuestra historia.
 
-No necesito un mundo perfecto ni maravillas imposibles. Me hace feliz pensar en caminar contigo, escuchar lo que llevas dentro y seguir compartiendo historias, lugares y días.
+Y creo que eso es lo que más me gusta de nosotros, que no necesitamos grandes cosas para crear momentos que terminan significándolo todo.
 
-Gracias por abrirme un poquito más tu corazón. Quiero cuidar lo que somos y seguir descubriendo contigo lo que podemos llegar a ser.
+No necesito una vida perfecta ni un mundo lleno de maravillas. Me basta con poder caminar contigo, escucharte hablar de lo que te gusta, conocer lo que llevas dentro, reírnos de cualquier tontería y seguir acumulando esos pequeños momentos que algún día vamos a mirar atrás y recordar con una sonrisa.
 
-De todas las maravillas, mi favorita es encontrarte en mi vida.
+Gracias por confiar en mí, por dejarme conocer partes de ti que quizá no le muestras a cualquiera y, sobre todo, por dejarme formar parte de tu vida.
 
-Con amor,
-David 💛`;
+Quiero cuidar lo que tenemos. Quiero seguir conociéndote, seguir sorprendiéndome contigo y descubrir, sin prisa, todo lo bonito que todavía nos queda por vivir.
+
+Porque si tuviera que elegir una sola maravilla entre todas las que existen, no tendría que pensarlo demasiado.
+
+Sería encontrarte a ti.
+
+Y si algún día me preguntan qué lugar se siente como hogar, creo que tampoco tendría que pensarlo.
+
+Tú.
+
+Con todo mi amor,
+Davison 💛`;
 
   constructor() {
     afterNextRender(() => {

@@ -17,6 +17,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 import { crearRutasPuzzle3 } from "./puzzle3.js";
+import { crearRutasPuzzle4 } from "./puzzle4.js";
 
 /*
  * =========================================================
@@ -384,6 +385,12 @@ const manejarPuzzle3 = crearRutasPuzzle3({
   libros: process.env.PUZZLE3_LIBROS
 });
 
+const manejarPuzzle4 = crearRutasPuzzle4({
+  enviarCorreo,
+  destinatario: MI_EMAIL,
+  secreto: ADMIN_TOKEN
+});
+
 /*
  * =========================================================
  * SERVIDOR
@@ -412,6 +419,10 @@ const server =
       }
 
       if (await manejarPuzzle3(req, res, responder)) {
+        return;
+      }
+
+      if (await manejarPuzzle4(req, res, responder)) {
         return;
       }
 
