@@ -30,7 +30,7 @@ export class Puzzle3 {
   private readonly zone = inject(NgZone);
   private readonly storageKey = 'amorcito_puzzle3_maravillas_v1';
   // Cambia este valor por la URL HTTPS de tu backend cuando publiques.
-  private readonly api = 'http://localhost:3000';
+  private readonly api = 'https://aniversario-mb40.onrender.com';
   private motor?: Mundo3D;
   private partidaId = '';
   private clave = '';
