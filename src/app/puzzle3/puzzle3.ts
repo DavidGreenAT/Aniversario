@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { finalize, timeout } from 'rxjs';
+import { timeout } from 'rxjs';
 import { AmorcitoService } from '../services/amorcito-service';
 import type { Lugar, Mundo3D } from './mundo3d';
 
@@ -45,7 +45,7 @@ export class Puzzle3 {
       pregunta: '¿Por qué este mirador representa un futuro entre nosotros?',
       pista: 'Camina hacia el barandal y busca junto al telescopio, a la derecha.', campo: 'mirador' },
     { id: 'libreria', nombre: 'La librería de nuestros recuerdos', subtitulo: 'Hay historias que empiezan con un regalo.',
-      pregunta: '¿Cómo se llama el primer libro que te regalé?',
+      pregunta: 'Si nuestra historia fuera un libro, ¿qué te gustaría que pasara en el próximo capítulo?',
       pista: 'Cruza el pasillo central. La última esfera está delante de la mesa de lectura.', campo: 'libro' }
   ];
   readonly indice = signal(0);
@@ -167,21 +167,28 @@ David 💛`;
   }
 
   confirmarRespuesta(): void {
-    if (this.validando() || this.actualRecogido()) return;
-    const texto = this.borrador().trim();
-    const max = this.actual().id === 'libreria' ? 200 : 2000;
-    if (!texto || texto.length > max) {
-      this.errorRespuesta.set(`Escribe entre 1 y ${max} caracteres, a tu manera 💛`); return;
+    if (this.validando() || this.actualRecogido()) {
+      return;
     }
-    if (this.actual().id !== 'libreria') { this.recoger(texto); return; }
-    if (!this.invitacionValida()) { this.errorRespuesta.set('Abre el juego desde el enlace de tu invitación.'); return; }
-    this.validando.set(true);
-    this.http.post<RespuestaAPI>(`${this.api}/api/puzzle3/validar-libro`, { clave: this.clave, libro: texto })
-      .pipe(timeout(15000), takeUntilDestroyed(this.destroyRef), finalize(() => this.validando.set(false)))
-      .subscribe({
-        next: r => { if (r.ok) this.recoger(texto); else this.errorRespuesta.set(r.mensaje || 'No se pudo validar el título.'); },
-        error: e => this.errorRespuesta.set(this.mensajeError(e, 'No pude consultar el libro. Revisa tu conexión e inténtalo otra vez.'))
-      });
+
+    const texto = this.borrador().trim();
+
+    if (!texto) {
+      this.errorRespuesta.set(
+        'Escribe lo que sientes, amorcito 💛'
+      );
+      return;
+    }
+
+    if (texto.length > 2000) {
+      this.errorRespuesta.set(
+        'Puedes escribir hasta 2,000 caracteres 💛'
+      );
+      return;
+    }
+
+    this.errorRespuesta.set('');
+    this.recoger(texto);
   }
 
   private recoger(texto: string): void {
@@ -271,7 +278,7 @@ David 💛`;
         this.partidaId = data.id;
         const r = data.respuestas;
         if (r && ['parque','mirador','libro'].every(k => typeof r[k] === 'string')) {
-          this.respuestas.set({ parque: r.parque.slice(0,2000), mirador: r.mirador.slice(0,2000), libro: r.libro.slice(0,200) });
+          this.respuestas.set({ parque: r.parque.slice(0,2000), mirador: r.mirador.slice(0,2000), libro: r.libro.slice(0,2000) });
           // Solo restaura un prefijo consecutivo de lugares con respuesta.
           const recogidos: Lugar[] = [];
           for (const lugar of this.lugares) {

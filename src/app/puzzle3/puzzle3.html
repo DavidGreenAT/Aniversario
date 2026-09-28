@@ -139,13 +139,24 @@
     <button type="button" class="cerrar" aria-label="Cerrar y seguir explorando" (click)="cerrarReto()" [disabled]="validando()">×</button>
     <span class="eyebrow">OJO DE LUZ 0{{ indice() + 1 }}</span>
     <h2 id="titulo-reto">{{ actual().nombre }}</h2>
-    <p id="detalle-reto">{{ indice() < 2 ? 'Aquí no hay respuestas correctas. Solo quiero conocer lo que sientes.' : 'Escribe el título; no importa si usas mayúsculas o acentos.' }}</p>
+    <p id="detalle-reto">Aquí no hay respuestas correctas. Solo quiero conocer lo que sientes.</p>
     <form (ngSubmit)="confirmarRespuesta()">
       <label for="respuesta-reto">{{ actual().pregunta }}</label>
-      <textarea id="respuesta-reto" name="respuesta" [rows]="indice() === 2 ? 2 : 5"
-        [maxlength]="indice() === 2 ? 200 : 2000" [ngModel]="borrador()" (ngModelChange)="editar($event)"
-        [disabled]="validando()" autofocus placeholder="Escribe aquí…" aria-describedby="error-reto"></textarea>
-      <div class="contador-texto">{{ borrador().length }} / {{ indice() === 2 ? 200 : 2000 }}</div>
+      <textarea
+        id="respuesta-reto"
+        name="respuesta"
+        rows="5"
+        maxlength="2000"
+        [ngModel]="borrador()"
+        (ngModelChange)="editar($event)"
+        [disabled]="validando()"
+        autofocus
+        placeholder="Escribe aquí…"
+        aria-describedby="error-reto"
+      ></textarea>
+      <div class="contador-texto">
+        {{ borrador().length }} / 2000
+      </div>
       <p class="nota">Al completar los tres lugares, tus respuestas se enviarán a David.</p>
       <p class="error" id="error-reto" role="status">{{ errorRespuesta() }}</p>
       <button type="submit" class="dorado ancho" [disabled]="validando()">{{ validando() ? 'Comprobando el recuerdo…' : 'Guardar mi respuesta y recoger el ojo ✧' }}</button>

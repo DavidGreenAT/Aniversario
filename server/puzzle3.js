@@ -123,7 +123,7 @@ export function crearRutasPuzzle3({
           ${[
             ['El parque y el lago', 'Lo que siempre quiso decirte el primer día de novios', registro.respuestas.parque],
             ['El mirador', 'Por qué representa un futuro entre ustedes', registro.respuestas.mirador],
-            ['La librería', 'El primer libro que le regalaste', registro.respuestas.libro]
+            ['La librería de nuestra historia', 'Si nuestra historia fuera un libro, ¿qué te gustaría que pasara en el próximo capítulo?', registro.respuestas.libro]
           ].map(([lugar,pregunta,respuesta]) => `<h2 style="color:#e8c848">${lugar}</h2><p>${pregunta}</p>
             <div style="white-space:pre-wrap;background:#ffffff10;padding:18px;border-radius:12px;line-height:1.8">${escapar(respuesta)}</div>`).join('')}
           <p style="color:#b0b7bd">Registrado: ${escapar(registro.fecha)} · ID: ${registro.id}</p></div>`;
@@ -157,8 +157,12 @@ export function crearRutasPuzzle3({
       limitar(req);
       const datos = await bodyJSON(req);
       validarClave(datos.clave);
-      const libro = campo(datos.libro, 'Libro', 200);
-      validarLibro(libro);
+
+      const libro = campo(
+        datos.libro,
+        'La librería',
+        2000
+      );
       if (pathname.endsWith('/validar-libro')) {
         responder(res, 200, { ok: true }); return true;
       }
